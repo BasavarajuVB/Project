@@ -5,7 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Legend, PieChart, Pie
 import { ExpandOutlined, MoreOutlined, SearchOutlined, RobotOutlined } from '@ant-design/icons';
 import { Button, Table, Tag, Dropdown, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-// Styles moved to global entry (app/layout.tsx) per Next.js guidance
+import './DataPullDashboard.css'
 import QualityMetrics from './QualityMetrics';
 import FailedCapturesWidget from './FailedCapturesWidget';
 

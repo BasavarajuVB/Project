@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { ConfigProvider } from 'antd'
 import './globals.css'
-import './components/DataPullDashboard.css'
 
 export const metadata: Metadata = {
   title: 'HES - SLA Dashboard',
