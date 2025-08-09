@@ -33,7 +33,7 @@ const CopilotWidget: React.FC<CopilotWidgetProps> = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   const handleOpenCopilotWeb = () => {
-    window.open('https://copilot.microsoft.com/', '_blank', 'noopener,noreferrer');
+    window.open('https://example.com/', '_blank', 'noopener,noreferrer');
   };
 
   const handleSendMessage = () => {
@@ -72,16 +72,8 @@ const CopilotWidget: React.FC<CopilotWidgetProps> = ({ isOpen, onClose }) => {
     <div className={`copilot-widget microsoft-copilot ${isOpen ? 'open' : ''}`}>
       <div className="copilot-header microsoft-header">
         <div className="copilot-header-left">
-          <div className="microsoft-logo">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <rect x="1" y="1" width="8" height="8" fill="#F25022"/>
-              <rect x="11" y="1" width="8" height="8" fill="#7FBA00"/>
-              <rect x="1" y="11" width="8" height="8" fill="#00A4EF"/>
-              <rect x="11" y="11" width="8" height="8" fill="#FFB900"/>
-            </svg>
-          </div>
           <div>
-            <h3>Microsoft Copilot</h3>
+            <h3>AI Assistant</h3>
             <span className="copilot-status">AI-powered assistant</span>
           </div>
         </div>
@@ -97,7 +89,7 @@ const CopilotWidget: React.FC<CopilotWidgetProps> = ({ isOpen, onClose }) => {
         {isLoading ? (
           <div className="loading-container">
             <Spin size="large" />
-            <p>Connecting to Microsoft Copilot...</p>
+            <p>Connecting to AI Assistant...</p>
           </div>
         ) : (
           <div className="copilot-main-content">
@@ -112,7 +104,7 @@ const CopilotWidget: React.FC<CopilotWidgetProps> = ({ isOpen, onClose }) => {
                       <circle cx="28" cy="24" r="2" fill="#0078d4"/>
                     </svg>
                   </div>
-                  <h3>Microsoft Copilot</h3>
+                  <h3>AI Assistant</h3>
                   <p>Ask me anything about your dashboard or data</p>
                 </div>
                 
@@ -161,7 +153,7 @@ const CopilotWidget: React.FC<CopilotWidgetProps> = ({ isOpen, onClose }) => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask Copilot anything about your dashboard..."
+            placeholder="Ask AI Assistant anything about your dashboard..."
             autoSize={{ minRows: 1, maxRows: 3 }}
             className="copilot-input"
           />
@@ -177,18 +169,7 @@ const CopilotWidget: React.FC<CopilotWidgetProps> = ({ isOpen, onClose }) => {
 
       <div className="copilot-footer microsoft-footer">
         <div className="footer-links">
-          <button onClick={handleOpenCopilotWeb} className="footer-link">
-            Open in new tab
-          </button>
-          <span className="separator">•</span>
-          <a 
-            href="https://privacy.microsoft.com/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="footer-link"
-          >
-            Privacy
-          </a>
+          <button onClick={handleOpenCopilotWeb} className="footer-link">Open in new tab</button>
         </div>
       </div>
     </div>
