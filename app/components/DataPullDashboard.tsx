@@ -5,9 +5,10 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Legend, PieChart, Pie
 import { ExpandOutlined, MoreOutlined, SearchOutlined, RobotOutlined } from '@ant-design/icons';
 import { Button, Table, Tag, Dropdown, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import './DataPullDashboard.css'
+// Styles moved to global entry (app/layout.tsx) per Next.js guidance
 import QualityMetrics from './QualityMetrics';
 import FailedCapturesWidget from './FailedCapturesWidget';
+import styles from './DataPullDashboard.module.css';
 
 interface DataType {
   key: string;
@@ -137,17 +138,17 @@ const DataPullDashboard: React.FC = () => {
       dataIndex: 'progress',
       key: 'progress',
       width: 100,
-      render: (progress: string) => (
-        <div className="progress-cell">
-          <div className="progress-bar">
-            <div 
-              className="progress-fill" 
-              style={{ width: progress }}
-            />
+          render: (progress: string) => (
+          <div className={styles['progress-cell']}>
+            <div className={styles['progress-bar']}>
+              <div 
+                className={styles['progress-fill']} 
+                style={{ width: progress }}
+              />
+            </div>
+            <span>{progress}</span>
           </div>
-          <span>{progress}</span>
-        </div>
-      ),
+        ),
     },
     {
       title: 'Issued/Executed',
@@ -171,14 +172,15 @@ const DataPullDashboard: React.FC = () => {
       dataIndex: 'status',
       key: 'status',
       width: 80,
-      render: (status: string) => status && <Tag color="red">{status}</Tag>,
+      render: (status: string) => status ? <span className={styles['status-error']}>v v</span> : null,
     },
     {
       title: 'More',
-      dataIndex: 'More',
-      key: 'status',
-      width: 80,
-      render: (status: string) => status && <Tag color="red">{status}</Tag>,
+      key: 'more',
+      width: 50,
+      render: () => (
+        <span style={{ color: 'rgba(255,255,255,0.8)' }}>⋮</span>
+      ),
     },
   ];
 
@@ -202,19 +204,19 @@ const DataPullDashboard: React.FC = () => {
   };
 
   return (
-    <div className="data-pull-dashboard">
+    <div className={styles['data-pull-dashboard']}>
       {/* Top Navigation Bar */}
-      <div className="top-navbar">
-        <div className="nav-center" style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-          <select className="dp-select">
+      <div className={styles['top-navbar']}>
+        <div className={styles['nav-center']} style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <select className={styles['dp-select']}>
             <option>Week</option>
             <option>Month</option>
             <option>Year</option>
           </select>
-          <select className="dp-select"><option>All sections</option></select>
-          <select className="dp-select"><option>All subsections</option></select>
-          <select className="dp-select"><option>All feeders</option></select>
-          <Button className="filter-btn">Filter</Button>
+          <select className={styles['dp-select']}><option>All sections</option></select>
+          <select className={styles['dp-select']}><option>All subsections</option></select>
+          <select className={styles['dp-select']}><option>All feeders</option></select>
+          <Button className={styles['filter-btn']}>Filter</Button>
           <Button type="text" style={{ color: '#8fa8c2' }}>Reset</Button>
           {/* <div className="live-status"><span className="live-dot"/> Live</div> */}
         </div>
@@ -226,42 +228,42 @@ const DataPullDashboard: React.FC = () => {
       </div>
 
       {/* Top Metrics Cards */}
-      <div className="metrics-grid">
-        <div className="metric-card total-meters">
-          <div className="metric-label">Total meters</div>
-          <div className="metric-value">12,34,567</div>
+      <div className={styles['metrics-grid']}>
+        <div className={`${styles['metric-card']} ${styles['total-meters']}`}>
+          <div className={styles['metric-label']}>Total meters</div>
+          <div className={styles['metric-value']}>12,34,567</div>
         </div>
         
-        <div className="metric-card commands-executed">
-          <div className="metric-label">Pulls Commands Executed vs Sent</div>
-          <div className="metric-value">500k / 700k</div>
+        <div className={`${styles['metric-card']} ${styles['commands-executed']}`}>
+          <div className={styles['metric-label']}>Pulls Commands Executed vs Sent</div>
+          <div className={styles['metric-value']}>500k / 700k</div>
         </div>
         
-        <div className="metric-card request-types">
-          <div className="metric-label">Request Types: Uni-, Multi-, Broadcast</div>
-          <div className="metric-value">1k, 3.3k, 7</div>
+        <div className={`${styles['metric-card']} ${styles['request-types']}`}>
+          <div className={styles['metric-label']}>Request Types: Uni-, Multi-, Broadcast</div>
+          <div className={styles['metric-value']}>1k, 3.3k, 7</div>
         </div>
         
-        <div className="metric-card success-rate">
-          <div className="metric-label">Read Success Rate</div>
-          <div className="metric-value">96.06%</div>
-          <div className="metric-change change-negative">
+        <div className={`${styles['metric-card']} ${styles['success-rate']}`}>
+          <div className={styles['metric-label']}>Read Success Rate</div>
+          <div className={styles['metric-value']}>96.06%</div>
+          <div className={`${styles['metric-change']} ${styles['change-negative']}`}>
             ↘ -0.01%
           </div>
         </div>
         
-        <div className="metric-card avg-time">
-          <div className="metric-label">Average Executed Time</div>
-          <div className="metric-value">4.51 min</div>
+        <div className={`${styles['metric-card']} ${styles['avg-time']}`}>
+          <div className={styles['metric-label']}>Average Executed Time</div>
+          <div className={styles['metric-value']}>4.51 min</div>
         </div>
       </div>
 
       {/* Charts Section */}
-      <div className="charts-section">
-        <div className="chart-card">
-          <div className="chart-header">
-            <div className="chart-title">Read Success Rate</div>
-            <ExpandOutlined className="expand-icon" />
+      <div className={styles['charts-section']}>
+        <div className={styles['chart-card']}>
+          <div className={styles['chart-header']}>
+            <div className={styles['chart-title']}>Read Success Rate</div>
+            <ExpandOutlined className={styles['expand-icon']} />
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={readSuccessData}>
@@ -274,10 +276,10 @@ const DataPullDashboard: React.FC = () => {
           </ResponsiveContainer>
         </div>
 
-        <div className="chart-card">
-          <div className="chart-header">
-            <div className="chart-title">Monthly Read Success Rate</div>
-            <ExpandOutlined className="expand-icon" />
+        <div className={styles['chart-card']}>
+          <div className={styles['chart-header']}>
+            <div className={styles['chart-title']}>Monthly Read Success Rate</div>
+            <ExpandOutlined className={styles['expand-icon']} />
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={monthlyData}>
@@ -292,29 +294,33 @@ const DataPullDashboard: React.FC = () => {
       </div>
 
       {/* Command Status Section */}
-      <div className="command-status-section">
-        <div className="command-status-main">
-          <div className="command-header">
-            <div className="command-tabs">
-              <div className="tab active">All (10)</div>
-              <div className="tab">Pending (3)</div>
-              <div className="tab">In Progress (2)</div>
-              <div className="tab">Success (4)</div>
-              <div className="tab">Failed (1)</div>
+      <div className={styles['command-status-section']}>
+        <div className={styles['command-status-main']}>
+          <div className={styles['command-header']}>
+            <div className={styles['command-header-top']}>
+              <div className={styles['command-title']}>Command Status</div>
+              <ExpandOutlined className={styles['command-extra']} />
+            </div>
+            <div className={styles['command-tabs']}>
+              <div className={`${styles['tab']} ${styles['active']}`}>All (10)</div>
+              <div className={styles['tab']}>Pending (3)</div>
+              <div className={styles['tab']}>In Progress (2)</div>
+              <div className={styles['tab']}>Success (4)</div>
+              <div className={styles['tab']}>Failed (1)</div>
             </div>
           </div>
           
-          <div className="table-container">
+          <div className={styles['table-container']}>
             <Table 
               columns={columns} 
               dataSource={tableData} 
               pagination={false}
               size="small"
-              className="command-table"
+              className={styles['command-table']}
             />
           </div>
           
-          <div className="pagination">
+          <div className={styles['pagination']}>
             <Button type="text">«</Button>
             <Button type="text">‹</Button>
             <Button type="primary">1</Button>
@@ -330,21 +336,21 @@ const DataPullDashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="data-collection-chart">
-          <div className="chart-header">
-            <div className="chart-title">Data Collection</div>
+        <div className={styles['data-collection-chart']}>
+          <div className={styles['chart-header']}>
+            <div className={styles['chart-title']}>Data Collection</div>
           </div>
-          <div className="legend">
-            <div className="legend-item">
-              <div className="legend-color" style={{ backgroundColor: '#1890ff' }}></div>
+          <div className={styles['legend']}>
+            <div className={styles['legend-item']}>
+              <div className={styles['legend-color']} style={{ backgroundColor: '#1890ff' }}></div>
               <span>1st Attempt</span>
             </div>
-            <div className="legend-item">
-              <div className="legend-color" style={{ backgroundColor: '#52c41a' }}></div>
+            <div className={styles['legend-item']}>
+              <div className={styles['legend-color']} style={{ backgroundColor: '#52c41a' }}></div>
               <span>2nd Attempt</span>
             </div>
-            <div className="legend-item">
-              <div className="legend-color" style={{ backgroundColor: '#faad14' }}></div>
+            <div className={styles['legend-item']}>
+              <div className={styles['legend-color']} style={{ backgroundColor: '#faad14' }}></div>
               <span>3rd Attempt</span>
             </div>
           </div>
@@ -369,7 +375,7 @@ const DataPullDashboard: React.FC = () => {
       </div>
 
       {/* Bottom Quality Cards using shared components */}
-      <div className="quality-cards-grid">
+      <div className={styles['quality-cards-grid']}>
         <QualityMetrics title="Consistency" value="98.5%" change="-0.01%" subValue="996000" isPositive={false} />
         <QualityMetrics title="Quality" value="73.1%" change="-0.01%" subValue="1243546" isPositive={false} />
         <QualityMetrics title="Security" value="147" change="-0.5%" subValue="" isPositive={true} />
