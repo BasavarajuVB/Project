@@ -15,11 +15,11 @@ import {
   ExportOutlined,
   MenuOutlined
 } from '@ant-design/icons';
-import Header from './components/pages/PageDataPush/Header';
-import CopilotWidget from './components/pages/PageDataPush/CopilotWidget';
+import Header from './components/common/Header';
+import CopilotWidget from './components/pages/PageDataPush/widgets/CopilotWidget';
 import PageDataPush from './components/pages/PageDataPush/PageDataPush';
 import PageDataPull from './components/pages/PageDataPull/PageDataPull';
-import './globals.css';
+import './styles/globals.css';
 
 const { Sider, Content } = Layout;
 

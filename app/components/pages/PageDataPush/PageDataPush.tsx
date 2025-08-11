@@ -2,12 +2,12 @@
 
 import React from 'react';
 import MetricsCards from './MetricsCards';
-import LiveIntervalChart from './LiveIntervalChart';
-import MonthlySuccessChart from './MonthlySuccessChart';
-import PerformanceByOEM from './PerformanceByOEM';
-import QualityMetrics from './QualityMetrics';
-import AdditionalWidgets from './AdditionalWidgets';
-import FailedCapturesWidget from './FailedCapturesWidget';
+import LiveIntervalChart from './charts/LiveIntervalChart';
+import MonthlySuccessChart from './charts/MonthlySuccessChart';
+import PerformanceByOEM from './charts/PerformanceByOEM';
+import QualityMetrics from '../../common/QualityMetrics';
+import AdditionalWidgets from './widgets/AdditionalWidgets';
+import FailedCapturesWidget from './widgets/FailedCapturesWidget';
 
 interface PageDataPushProps {
   onExport: (format: 'csv' | 'xlsx') => void;

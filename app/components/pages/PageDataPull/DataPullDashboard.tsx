@@ -6,7 +6,7 @@ import { ExpandOutlined, MoreOutlined, SearchOutlined, RobotOutlined } from '@an
 import { Button, Table, Tag, Dropdown, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 // Styles moved to global entry (app/layout.tsx) per Next.js guidance
-import QualityMetrics from './QualityMetrics';
+import QualityMetrics from '../../common/QualityMetrics';
 import FailedCapturesWidget from './FailedCapturesWidget';
 import styles from './DataPullDashboard.module.css';
 
