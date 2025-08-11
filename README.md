@@ -1,16 +1,29 @@
-# SLA Dashboard - Data Push
+# SLA Dashboard - Data Push & Pull
 
-A comprehensive dashboard built with Next.js, TypeScript, and Ant Design that replicates the HES (Head End System) SLA Dashboard for monitoring Data Push metrics.
+A comprehensive dashboard built with Next.js, TypeScript, and Ant Design that replicates the HES (Head End System) SLA Dashboard for monitoring both Data Push and Data Pull metrics.
 
 ## Features
 
-- **Real-time Metrics Display**: Shows total meters, success rates, failed reads, time duration, and predicted daily meters
-- **Live Interval Charts**: Interactive bar charts showing real-time interval read success rates
-- **Monthly Success Tracking**: Historical monthly interval read success rate visualization
-- **Performance by OEM**: Progress bars showing performance metrics by Original Equipment Manufacturer
-- **Quality Metrics**: Consistency, Quality, and Security indicators with trend arrows
-- **Additional Widgets**: Tampers, Outages, and Power Quality Deviations monitoring
-- **Failed Captures Analysis**: Breakdown of failed captures by reason buckets (Meters, Communication, Software)
+- **Data Push Dashboard**
+  - Real-time metrics: total meters, read success rate, failed reads, time duration, predicted daily meters
+  - Live interval success rate chart
+  - Monthly success rate chart
+  - Performance by OEM with progress bars
+  - Quality metrics (Consistency, Quality, Security) with trend indicators
+  - Additional widgets (Tampers, Outages, Power Quality Deviations)
+  - Failed captures breakdown by reason bucket
+  - One-click export of on-screen data (CSV)
+
+- **Data Pull Dashboard**
+  - Top filters for time span and sections
+  - Metrics cards and two read-success charts
+  - Command Status table with progress visuals and pagination
+  - Data Collection pie chart with legend
+  - Quality metrics cards and failed captures widget
+  - Export of table data (CSV)
+
+- **AI Assistant Panel**
+  - Docked panel with suggestions and simple chat simulation
 
 ## Tech Stack
 
@@ -18,7 +31,7 @@ A comprehensive dashboard built with Next.js, TypeScript, and Ant Design that re
 - **TypeScript** for type safety
 - **Ant Design** for UI components
 - **Recharts** for interactive charts
-- **Custom CSS** for exact visual matching
+- **Custom CSS** for exact visual matching (global + CSS Modules)
 
 ## Getting Started
 
@@ -39,16 +52,30 @@ npm run dev
 ```
 ├── app/
 │   ├── components/
-│   │   ├── MetricsCards.tsx         # Top metric cards
-│   │   ├── LiveIntervalChart.tsx    # Live interval success rate chart
-│   │   ├── MonthlySuccessChart.tsx  # Monthly success rate chart
-│   │   ├── PerformanceByOEM.tsx     # OEM performance bars
-│   │   ├── QualityMetrics.tsx       # Quality metric widgets
-│   │   ├── AdditionalWidgets.tsx    # Tampers, Outages, etc.
-│   │   └── FailedCapturesWidget.tsx # Failed captures breakdown
-│   ├── globals.css                  # Global styles and theme
-│   ├── layout.tsx                   # Root layout with Ant Design config
-│   └── page.tsx                     # Main dashboard page
+│   │   ├── common/
+│   │   │   ├── Header.tsx              # Top header (breadcrumb, actions)
+│   │   │   └── QualityMetrics.tsx      # Reusable quality metric widget
+│   │   └── pages/
+│   │       ├── PageDataPush/
+│   │       │   ├── charts/
+│   │       │   │   ├── LiveIntervalChart.tsx
+│   │       │   │   ├── MonthlySuccessChart.tsx
+│   │       │   │   └── PerformanceByOEM.tsx
+│   │       │   ├── widgets/
+│   │       │   │   ├── AdditionalWidgets.tsx
+│   │       │   │   ├── CopilotWidget.tsx
+│   │       │   │   └── FailedCapturesWidget.tsx
+│   │       │   ├── MetricsCards.tsx
+│   │       │   └── PageDataPush.tsx
+│   │       └── PageDataPull/
+│   │           ├── DataPullDashboard.module.css
+│   │           ├── DataPullDashboard.tsx
+│   │           ├── FailedCapturesWidget.tsx
+│   │           └── PageDataPull.tsx
+│   ├── styles/
+│   │   └── globals.css                 # Global styles and theme
+│   ├── layout.tsx                      # Root layout + Ant Design config
+│   └── page.tsx                        # Main dashboard shell (navigation)
 ├── package.json
 ├── tsconfig.json
 └── next.config.js
@@ -56,39 +83,26 @@ npm run dev
 
 ## Dashboard Layout
 
-The dashboard includes:
-
-1. **Sidebar Navigation**: HES branding with menu items for different sections
-2. **Header Section**: Breadcrumb navigation, live status indicator, and export button
-3. **Metrics Row**: 5 key performance indicators with trend arrows
-4. **Charts Row**: Live and monthly interval success rate charts
-5. **Performance Row**: OEM performance and quality metrics
-6. **Widgets Row**: Additional monitoring widgets and failed captures analysis
+The main shell renders a fixed sidebar, a top `Header`, and switches between Data Push and Data Pull dashboards via the in-app menu.
 
 ## Styling
 
-The dashboard uses a dark blue theme (`#1e3a5f`) with:
-- Gradient card backgrounds
-- Orange accent color (`#ff6b35`) for the selected menu item and export button
-- Green/red indicators for positive/negative trends
-- Responsive grid layouts
-- Smooth hover effects and transitions
+- Global theme and shared styles live in `app/styles/globals.css`
+- Data Pull dashboard uses a CSS Module: `DataPullDashboard.module.css`
+- Dark blue theme (`#1e3a5f`) with gradient cards, orange accent (`#ff6b35`), and responsive grids
 
 ## Customization
 
-You can customize the dashboard by:
-- Modifying colors in `globals.css`
-- Adding new metric cards in `MetricsCards.tsx`
-- Updating chart data in the respective chart components
-- Adding new widgets following the existing component patterns
+- Update theme and shared styles in `app/styles/globals.css`
+- Add or modify cards in `MetricsCards.tsx`
+- Adjust chart data inside components in `charts/`
+- Add new widgets following the patterns in `widgets/`
 
 ## Production Build
-
-To create a production build:
 
 ```bash
 npm run build
 npm start
 ```
 
-The dashboard is optimized for production with Next.js automatic optimization features.
+The dashboard is optimized for production with Next.js automatic optimizations.
