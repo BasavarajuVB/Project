@@ -1,4 +1,4 @@
-# SLA Dashboard - Data Push & Pull
+# HES Data Operations Dashboard
 
 A comprehensive dashboard built with Next.js, TypeScript, and Ant Design that replicates the HES (Head End System) SLA Dashboard for monitoring both Data Push and Data Pull metrics.
 
