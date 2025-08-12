@@ -105,4 +105,8 @@ npm run build
 npm start
 ```
 
+<<<<<<< HEAD
 The dashboard is optimized for production with Next.js automatic optimizations.
+=======
+The dashboard is optimized for production with Next.js automatic optimizations.
+>>>>>>> 6a90d469917e5375019a5403012d1b3248f60cd0
