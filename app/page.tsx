@@ -189,7 +189,6 @@ export default function Dashboard() {
 
   return (
     <Layout className="dashboard-layout">
-      {/* Mobile overlay removed per requirement */}
       
       <Sider 
         width={200} 
