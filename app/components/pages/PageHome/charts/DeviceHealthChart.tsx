@@ -27,15 +27,17 @@ const DeviceHealthChart: React.FC = () => {
 
   const handleClickOutside = React.useCallback((event: MouseEvent) => {
     const target = event.target as Node;
-    const chartElement = document.querySelector(`.${styles.deviceHealthChart}.${styles.expanded}`);
-    
-    if (isExpanded && chartElement && !chartElement.contains(target)) {
-      setIsExpanded(false);
+    if (isExpanded && target instanceof Node) {
+      // Check if click is outside the current component
+      const currentElement = event.currentTarget as Element;
+      if (currentElement && !currentElement.contains(target)) {
+        setIsExpanded(false);
+      }
     }
   }, [isExpanded]);
 
   React.useEffect(() => {
-    if (isExpanded) {
+    if (isExpanded && typeof window !== 'undefined') {
       document.addEventListener('mousedown', handleClickOutside);
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
