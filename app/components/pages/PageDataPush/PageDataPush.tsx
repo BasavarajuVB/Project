@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import MetricsCards from './MetricsCards';
 import LiveIntervalChart from './charts/LiveIntervalChart';
 import MonthlySuccessChart from './charts/MonthlySuccessChart';
@@ -14,6 +14,75 @@ interface PageDataPushProps {
 }
 
 const PageDataPush: React.FC<PageDataPushProps> = ({ onExport }) => {
+  const [tampers, setTampers] = useState<string>('0');
+  const [powerDeviations, setPowerDeviations] = useState<string>('0');
+  const [outages, setOutages] = useState<string>('0');
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchTampers = async () => {
+      try {
+        const res = await fetch('/api/dp/tampers', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text = (await res.text()).trim();
+        if (!isMounted) return;
+        setTampers(prev => (prev === text ? prev : text));
+      } catch (e) {
+        if (!isMounted) return;
+        console.error('Failed to fetch tampers', e);
+      }
+    };
+    fetchTampers();
+    const intervalId = setInterval(fetchTampers, 10000);
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchPowerDeviations = async () => {
+      try {
+        const res = await fetch('/api/dp/powerdeviations', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text = (await res.text()).trim();
+        if (!isMounted) return;
+        setPowerDeviations(prev => (prev === text ? prev : text));
+      } catch (e) {
+        if (!isMounted) return;
+        console.error('Failed to fetch power deviations', e);
+      }
+    };
+    fetchPowerDeviations();
+    const intervalId = setInterval(fetchPowerDeviations, 10000);
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchOutages = async () => {
+      try {
+        const res = await fetch('/api/dp/outages', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text = (await res.text()).trim();
+        if (!isMounted) return;
+        setOutages(prev => (prev === text ? prev : text));
+      } catch (e) {
+        if (!isMounted) return;
+        console.error('Failed to fetch outages', e);
+      }
+    };
+    fetchOutages();
+    const intervalId = setInterval(fetchOutages, 10000);
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
@@ -34,9 +103,9 @@ const PageDataPush: React.FC<PageDataPushProps> = ({ onExport }) => {
         <div className="col-stack">
           <PerformanceByOEM />
           <div className="cards-grid cards-left">
-            <AdditionalWidgets title="Tampers" value="39" change="0%" isPositive={false} />
-            <AdditionalWidgets title="Outages" value="12" change="6%" isPositive={false} />
-            <AdditionalWidgets title="Power Quality Deviations" value="15" change="5%" isPositive={true} />
+            <AdditionalWidgets title="Tampers" value={tampers} change="0%" isPositive={false} />
+            <AdditionalWidgets title="Outages" value={outages} change="6%" isPositive={false} />
+            <AdditionalWidgets title="Power Quality Deviations" value={powerDeviations} change="5%" isPositive={true} />
           </div>
         </div>
         <div className="col-stack">

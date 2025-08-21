@@ -378,7 +378,7 @@ const DataPullDashboard: React.FC = () => {
       <div className={styles['quality-cards-grid']}>
         <QualityMetrics title="Consistency" value="98.5%" change="-0.01%" subValue="996000" isPositive={false} />
         <QualityMetrics title="Quality" value="73.1%" change="-0.01%" subValue="1243546" isPositive={false} />
-        <QualityMetrics title="Security" value="147" change="-0.5%" subValue="" isPositive={true} />
+        <QualityMetrics title="Security" value="147" change="-0.5%" subValue="97987878" isPositive={true} />
         <FailedCapturesWidget />
       </div>
     </div>

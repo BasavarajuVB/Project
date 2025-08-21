@@ -238,13 +238,16 @@ body * {
   top: 0;
   right: 0;
   left: 200px;
-  z-index: 999;
-  transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1200; /* ensure header stays above Copilot */
+  transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1), right 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .header.collapsed-sidebar {
   left: 60px;
 }
+
+/* Align header content with copilot open (reduce right space for panel) */
+.header.copilot-open { right: 380px; }
 
 .header-left {
   flex: 1;
@@ -540,11 +543,16 @@ body * {
   padding: 20px;
   background: #1e3a5f;
   min-height: calc(100vh - 64px);
-  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1), margin-right 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .main-content.collapsed-sidebar {
   margin-left: 60px;
+}
+
+/* When Copilot is open, shift content left so panel slides in without overlay */
+.main-content.copilot-open {
+  margin-right: 380px; /* matches copilot width */
 }
 
 /* Responsive main content */
@@ -632,10 +640,10 @@ body * {
 /* Microsoft Copilot Widget Styles */
 .copilot-widget {
   position: fixed;
-  top: 64px;
+  top: 0;
   right: -400px;
   width: 380px;
-  height: calc(100vh - 64px);
+  height: 100vh;
   background: #fff;
   border-left: 1px solid #e8e8e8;
   box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
@@ -1314,10 +1322,9 @@ body * {
 }
 
 .metric-label {
-  font-size: 11px;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 8px;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 500;
 }
@@ -1353,7 +1360,7 @@ body * {
 
 .chart-card {
   background: linear-gradient(135deg, #4A7BA7 0%, #5B8BB5 100%);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 20px;
   color: #fff;
 }
@@ -1456,10 +1463,11 @@ body * {
   background: 
     linear-gradient(180deg, #4179AA 0%, #52B788 100%),
     radial-gradient(94.11% 92.5% at 50% 100%, rgba(89, 213, 95, 0.6) 0%, rgba(89, 213, 95, 0) 100%);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 20px;
   color: #fff;
-  text-align: center;
+  text-align: left;
+  align-items: flex-start;
  
  
 }
@@ -1478,11 +1486,15 @@ body * {
   margin-bottom: 8px;
 }
 
+
 .widget-label {
-  font-size: 14px;
-  color: #8fa8c2;
-  margin-bottom: 4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+  font-weight: 500;
 }
+
 
 .widget-change {
   font-size: 12px;
@@ -1566,7 +1578,7 @@ body * {
 .failed-captures-card {
   background: linear-gradient(135deg, #2d5a87 0%, #1e3a5f 100%);
   border: 1px solid #2d4f73;
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 20px;
   color: #fff;
 }
@@ -1610,7 +1622,7 @@ body * {
 .oem-perf-card {
   background-color: #4578a4;
   padding: 16px;
-  border-radius: 8px;
+  border-radius: 6px;
   width: 100%;
   font-family: Arial, sans-serif;
   box-sizing: border-box;

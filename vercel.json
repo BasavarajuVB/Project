@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/dp/:path*",
+      "destination": "http://103.114.154.128:30808/dp/:path*"
+    }
+  ]
+}
+
+

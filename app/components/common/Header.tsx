@@ -7,9 +7,11 @@ import { BellOutlined, RobotOutlined } from '@ant-design/icons';
 interface HeaderProps {
   sidebarCollapsed: boolean;
   onOpenCopilot: () => void;
+  copilotOpen?: boolean;
+  pageTitle?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot }) => {
+const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot, copilotOpen, pageTitle }) => {
   const currentTime = new Date().toLocaleString('en-US', {
     month: 'short',
     day: '2-digit',
@@ -19,14 +21,14 @@ const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot }) => {
   });
 
   return (
-    <div className={`header ${sidebarCollapsed ? 'collapsed-sidebar' : ''}`}>
+    <div className={`header ${sidebarCollapsed ? 'collapsed-sidebar' : ''} ${copilotOpen ? 'copilot-open' : ''}`}>
       <div className="header-left">
         <div className="breadcrumb">
           <span className="breadcrumb-item">Home</span>
           <span className="breadcrumb-separator">/</span>
           <span className="breadcrumb-item">SLA Dashboards</span>
           <span className="breadcrumb-separator">/</span>
-          <span className="breadcrumb-item active">Data Push</span>
+          <span className="breadcrumb-item active">{pageTitle || 'Dashboard'}</span>
         </div>
       </div>
       
