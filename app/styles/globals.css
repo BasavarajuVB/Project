@@ -263,12 +263,15 @@ body * {
   right: 0;
   left: 200px;
   z-index: 999;
-  transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1), right 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .header.collapsed-sidebar {
   left: 60px;
 }
+
+/* When Copilot is open, align header with reserved panel space */
+.header.copilot-open { right: 0; }
 
 .header-left {
   flex: 1;
@@ -564,11 +567,16 @@ body * {
   padding: 20px;
   background: #1e3a5f;
   min-height: calc(100vh - 64px);
-  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1), margin-right 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .main-content.collapsed-sidebar {
   margin-left: 60px;
+}
+
+/* When Copilot is open, reserve space for the full-height panel */
+.main-content.copilot-open {
+  margin-right: 380px; /* match .copilot-widget width */
 }
 
 /* Responsive main content */
@@ -656,10 +664,10 @@ body * {
 /* Microsoft Copilot Widget Styles */
 .copilot-widget {
   position: fixed;
-  top: 64px;
+  top: 0; /* full height under viewport */
   right: -400px;
   width: 380px;
-  height: calc(100vh - 64px);
+  height: 100vh;
   background: #fff;
   border-left: 1px solid #e8e8e8;
   box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);

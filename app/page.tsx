@@ -217,10 +217,11 @@ export default function Dashboard() {
         sidebarCollapsed={!isMobile && sidebarCollapsed} 
         onOpenCopilot={handleOpenCopilot}
         currentPage={currentPage}
+        copilotOpen={copilotOpen}
       />
       
       <Layout>
-        <Content className={`main-content ${!isMobile && sidebarCollapsed ? 'collapsed-sidebar' : ''}`}>
+        <Content className={`main-content ${!isMobile && sidebarCollapsed ? 'collapsed-sidebar' : ''} ${copilotOpen ? 'copilot-open' : ''}`}>
           {currentPage === 'home' && (
             <PageHome />
           )}

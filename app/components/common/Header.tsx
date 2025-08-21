@@ -8,9 +8,10 @@ interface HeaderProps {
   sidebarCollapsed: boolean;
   onOpenCopilot: () => void;
   currentPage?: string;
+  copilotOpen?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot, currentPage = 'data-push' }) => {
+const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot, currentPage = 'data-push', copilotOpen }) => {
   const currentTime = new Date().toLocaleString('en-US', {
     month: 'short',
     day: '2-digit',
@@ -20,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot, curren
   });
 
   return (
-    <div className={`header ${sidebarCollapsed ? 'collapsed-sidebar' : ''}`}>
+    <div className={`header ${sidebarCollapsed ? 'collapsed-sidebar' : ''} ${copilotOpen ? 'copilot-open' : ''}`}>
       <div className="header-left">
         <div className="breadcrumb">
           <span className="breadcrumb-item">Home</span>
