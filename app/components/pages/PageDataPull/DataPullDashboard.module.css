@@ -120,8 +120,20 @@
 @media (max-width: 360px) { .metrics-grid { grid-template-columns: 1fr; } .fc-item { flex-wrap: wrap; gap: 4px; } .fc-label { flex: 1 1 100%; margin-bottom: 4px; } .fc-progress-wrapper { flex: 1; min-width: 60px; } .fc-percentage { flex: 0 0 auto; }
 }
 
-.qualityCard { /* container styles */ }
-.qLabel { /* title styles */ }
-.qValue { /* big number styles */ }
-.qChange { /* trend styles */ }
+.qualityCard { 
+  /* container styles */
+  display: block;
+}
+.qLabel { 
+  /* title styles */
+  display: block;
+}
+.qValue { 
+  /* big number styles */
+  display: block;
+}
+.qChange { 
+  /* trend styles */
+  display: block;
+}
 .qSub { font-size: 12px; color: #8fa8c2; margin-top: 8px; }
