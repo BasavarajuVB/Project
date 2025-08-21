@@ -7,10 +7,9 @@ import { BellOutlined, RobotOutlined } from '@ant-design/icons';
 interface HeaderProps {
   sidebarCollapsed: boolean;
   onOpenCopilot: () => void;
-  currentPage?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot, currentPage = 'data-push' }) => {
+const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot }) => {
   const currentTime = new Date().toLocaleString('en-US', {
     month: 'short',
     day: '2-digit',
@@ -27,11 +26,7 @@ const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot, curren
           <span className="breadcrumb-separator">/</span>
           <span className="breadcrumb-item">SLA Dashboards</span>
           <span className="breadcrumb-separator">/</span>
-          <span className="breadcrumb-item active">
-            {currentPage === 'home' ? 'Asset Dashboard' : 
-             currentPage === 'data-push' ? 'Data Push' : 
-             currentPage === 'data-pull' ? 'Data Pull' : 'Dashboard'}
-          </span>
+          <span className="breadcrumb-item active">Data Push</span>
         </div>
       </div>
       

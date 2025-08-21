@@ -19,7 +19,6 @@ import Header from './components/common/Header';
 import CopilotWidget from './components/pages/PageDataPush/widgets/CopilotWidget';
 import PageDataPush from './components/pages/PageDataPush/PageDataPush';
 import PageDataPull from './components/pages/PageDataPull/PageDataPull';
-import PageHome from './components/pages/PageHome/PageHome';
 import './styles/globals.css';
 
 const { Sider, Content } = Layout;
@@ -105,7 +104,7 @@ export default function Dashboard() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isMobile, setIsMobile] = React.useState(false);
   const [copilotOpen, setCopilotOpen] = React.useState(false);
-  const [currentPage, setCurrentPage] = React.useState('home');
+  const [currentPage, setCurrentPage] = React.useState('data-push');
 
   React.useEffect(() => {
     const checkMobile = () => {
@@ -205,7 +204,7 @@ export default function Dashboard() {
         </div>
         <Menu
           mode="inline"
-          defaultSelectedKeys={['home']}
+          defaultSelectedKeys={['data-push']}
           selectedKeys={[currentPage]}
           items={menuItems}
           inlineCollapsed={sidebarCollapsed}
@@ -215,16 +214,11 @@ export default function Dashboard() {
       
       <Header 
         sidebarCollapsed={!isMobile && sidebarCollapsed} 
-        onOpenCopilot={handleOpenCopilot}
-        currentPage={currentPage}
+        onOpenCopilot={handleOpenCopilot} 
       />
       
       <Layout>
         <Content className={`main-content ${!isMobile && sidebarCollapsed ? 'collapsed-sidebar' : ''}`}>
-          {currentPage === 'home' && (
-            <PageHome />
-          )}
-
           {currentPage === 'data-push' && (
             <PageDataPush onExport={exportDataPush} />
           )}

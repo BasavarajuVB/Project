@@ -34,7 +34,7 @@ body {
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 1;
+  z-index: 1000;
   width: 200px;
   transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
   will-change: width;
@@ -47,7 +47,7 @@ body {
   .sidebar {
     transform: translateX(-100%) !important;
     width: 200px !important;
-    z-index: 1;
+    z-index: 1001;
   }
   
   .sidebar.mobile-open {

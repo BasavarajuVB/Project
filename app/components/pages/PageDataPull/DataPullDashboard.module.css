@@ -11,7 +11,7 @@
 
 /* Top Navigation Bar */
 .top-navbar { display: flex; justify-content: space-between; align-items: center; background: transparent !important; padding: 16px 24px; border-radius: 8px; margin-bottom: 20px; }
-.dp-select { border: 2px solid #ffffffee; color: #fff; height: 32px; padding: 0 12px; border-radius: 8px;background: #0c3a64;  }
+.dp-select { background: #0c3a64; border: 2px solid #ffffffee; color: #fff; height: 32px; padding: 0 12px; border-radius: 8px; }
 .filter-btn { background: #2c5f8a !important; border: 2px solid #fffffff3 !important; color: #fff !important; height: 32px !important; border-radius: 8px !important; }
 .nav-left { display: flex; align-items: center; gap: 16px; }
 .hamburger-btn { color: #fff !important; border: none !important; background: transparent !important; }
