@@ -104,7 +104,18 @@ export default function Dashboard() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isMobile, setIsMobile] = React.useState(false);
   const [copilotOpen, setCopilotOpen] = React.useState(false);
+  const [sidebarWasCollapsedBeforeCopilot, setSidebarWasCollapsedBeforeCopilot] = React.useState<boolean | null>(null);
   const [currentPage, setCurrentPage] = React.useState('data-push');
+  const PAGE_LABELS: Record<string, string> = React.useMemo(() => ({
+    'home': 'Home',
+    'meter-list': 'Meter List',
+    'data-push': 'Data Push',
+    'data-pull': 'Data Pull',
+    'commands': 'Commands',
+    'reports': 'Reports',
+    'admin': 'Admin',
+    'api': 'API',
+  }), []);
 
   React.useEffect(() => {
     const checkMobile = () => {
@@ -141,10 +152,20 @@ export default function Dashboard() {
 
   const handleOpenCopilot = () => {
     setCopilotOpen(true);
+    // Auto-collapse sidebar (remember previous state) on non-mobile
+    if (!isMobile) {
+      setSidebarWasCollapsedBeforeCopilot(sidebarCollapsed);
+      setSidebarCollapsed(true);
+    }
   };
 
   const handleCloseCopilot = () => {
     setCopilotOpen(false);
+    // Restore sidebar to previous state after closing Copilot (non-mobile)
+    if (!isMobile && sidebarWasCollapsedBeforeCopilot !== null) {
+      setSidebarCollapsed(sidebarWasCollapsedBeforeCopilot);
+      setSidebarWasCollapsedBeforeCopilot(null);
+    }
   };
 
   // Export helpers for CSV/Excel using static data on screen
@@ -214,11 +235,13 @@ export default function Dashboard() {
       
       <Header 
         sidebarCollapsed={!isMobile && sidebarCollapsed} 
-        onOpenCopilot={handleOpenCopilot} 
+        onOpenCopilot={handleOpenCopilot}
+        copilotOpen={copilotOpen}
+        pageTitle={PAGE_LABELS[currentPage] ?? 'Dashboard'}
       />
       
       <Layout>
-        <Content className={`main-content ${!isMobile && sidebarCollapsed ? 'collapsed-sidebar' : ''}`}>
+        <Content className={`main-content ${!isMobile && sidebarCollapsed ? 'collapsed-sidebar' : ''} ${copilotOpen ? 'copilot-open' : ''}`}>
           {currentPage === 'data-push' && (
             <PageDataPush onExport={exportDataPush} />
           )}
