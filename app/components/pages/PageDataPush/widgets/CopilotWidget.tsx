@@ -12,10 +12,15 @@ interface CopilotWidgetProps {
 }
 
 const CopilotWidget: React.FC<CopilotWidgetProps> = ({ isOpen, onClose }) => {
+  const [isClient, setIsClient] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showFallback, setShowFallback] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Array<{id: string, type: 'user' | 'assistant', content: string, timestamp: Date}>>([]);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -106,7 +111,7 @@ const CopilotWidget: React.FC<CopilotWidgetProps> = ({ isOpen, onClose }) => {
                     <div className="message-content">
                       <p>{message.content}</p>
                       <span className="message-time">
-                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {isClient ? message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--'}
                       </span>
                     </div>
                   </div>

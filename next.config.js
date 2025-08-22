@@ -10,6 +10,10 @@ const nextConfig = {
         source: '/api/dp/:path*',
         destination: 'http://103.114.154.128:30808/dp/:path*',
       },
+      {
+        source: '/api/ad/:path*',
+        destination: 'http://103.114.154.128:30808/ad/:path*',
+      },
     ];
   },
 };
