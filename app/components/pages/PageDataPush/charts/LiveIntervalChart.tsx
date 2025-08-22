@@ -95,94 +95,28 @@
 
 // export default React.memo(LiveIntervalChart);
 'use client';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Legend } from 'recharts';
 import { ExpandOutlined } from '@ant-design/icons';
 
-interface IntervalApiItem {
-  successPercentage: number;
-  intervalStart: string;
-  meterCount?: number;
-  expectedMetersCount?: number;
+interface IntervalPoint {
+  label: string;
+  success: number;
+  failure: number;
 }
 
-interface IntervalPoint {
-  label: string;      // formatted date/time for x-axis
-  success: number;    // 0..100
-  failure: number;    // 100 - success, clamped to 0..100
-}
+// Static data for now; dynamic fetching code is commented below
+const staticData: IntervalPoint[] = [
+  { label: 'Jan 01 08:00', success: 85, failure: 15 },
+  { label: 'Jan 01 09:00', success: 91, failure: 9 },
+  { label: 'Jan 01 10:00', success: 75, failure: 25 },
+  { label: 'Jan 01 11:00', success: 80, failure: 20 },
+  { label: 'Jan 01 12:00', success: 85, failure: 15 },
+  { label: 'Jan 01 13:00', success: 68, failure: 32 },
+  { label: 'Jan 01 14:00', success: 95, failure: 5 },
+];
 
 const LiveIntervalChart: React.FC = () => {
-  const [data, setData] = useState<IntervalPoint[]>([]);
-  const [isFetching, setIsFetching] = useState(true);
-
-  const arraysClose = (a: IntervalPoint[], b: IntervalPoint[], delta = 0.5) => {
-    if (a.length !== b.length) return false;
-    for (let i = 0; i < a.length; i++) {
-      const x = a[i];
-      const y = b[i];
-      if (x.label !== y.label) return false;
-      if (Math.abs(x.success - y.success) > delta) return false;
-      if (Math.abs(x.failure - y.failure) > delta) return false;
-    }
-    return true;
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsFetching(true);
-      try {
-        const res = await fetch('/api/dp/meterscount/success/byintervals', { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const apiData: IntervalApiItem[] = await res.json();
-
-        // Keep a recent window (e.g., last 7 intervals) for readability
-        const recent = Array.isArray(apiData) ? apiData.slice(-7) : [];
-
-        const processed: IntervalPoint[] = recent.map((item) => {
-          const dateObj = new Date(item.intervalStart);
-          const label = dateObj.toLocaleString('en-US', {
-            month: 'short',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false,
-          });
-
-          const successRaw = Number(item.successPercentage);
-          const successClamped = Math.min(100, Math.max(0, Number.isFinite(successRaw) ? successRaw : 0));
-          const failureCalculated = Math.max(0, 100 - successClamped);
-
-          return {
-            label,
-            success: Math.round(successClamped),
-            failure: Math.round(failureCalculated),
-          };
-        });
-
-        setData((prev) => (arraysClose(prev, processed) ? prev : processed));
-      } catch (err) {
-        console.error('Failed to fetch live interval data', err);
-      } finally {
-        setIsFetching(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (isFetching && data.length === 0) {
-    return (
-      <div className="chart-card" style={{ height: '400px' }}>
-        <div className="chart-header">
-          <div className="chart-title">Live Interval Read Success Rate</div>
-          <ExpandOutlined className="expand-icon" />
-        </div>
-        Loading...
-      </div>
-    );
-  }
-
   return (
     <div className="chart-card">
       <div className="chart-header">
@@ -192,7 +126,7 @@ const LiveIntervalChart: React.FC = () => {
 
       <div style={{ position: 'relative' }}>
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <BarChart data={staticData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fill: '#8fa8c2', fontSize: 12 }} />
             <YAxis axisLine={false} tickLine={false} tick={{ fill: '#8fa8c2', fontSize: 12 }} domain={[0, 100]} />
             <Legend wrapperStyle={{ color: '#8fa8c2', fontSize: '12px', paddingTop: '10px' }} />
@@ -206,3 +140,15 @@ const LiveIntervalChart: React.FC = () => {
 };
 
 export default React.memo(LiveIntervalChart);
+
+/*
+// Previous dynamic implementation (commented out for static mode)
+import React, { useEffect, useState } from 'react';
+interface IntervalApiItem {
+  successPercentage: number;
+  intervalStart: string;
+  meterCount?: number;
+  expectedMetersCount?: number;
+}
+// ... dynamic fetching and state update logic
+*/

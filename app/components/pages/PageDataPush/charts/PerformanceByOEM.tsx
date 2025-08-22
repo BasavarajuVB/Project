@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 interface OEMPerformanceProps {
   name: string;
@@ -21,44 +21,21 @@ const OEMPerformanceItem: React.FC<OEMPerformanceProps> = ({ name, percentage, c
   );
 };
 
+// Static OEM data for now; dynamic fetching is commented below
+const staticOemData: OEMPerformanceProps[] = [
+  { name: 'Adya', percentage: 96.2, color: '#cf66e4' },
+  { name: 'HPL', percentage: 94.8, color: '#55c0b5' },
+  { name: 'Genus', percentage: 92.1, color: '#fdd835' },
+];
+
 const PerformanceByOEM: React.FC = () => {
-  const [oemData, setOemData] = useState<OEMPerformanceProps[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/charts/oem-performance', { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const apiData: Array<{ name: string; percentage: number }> = await res.json();
-        const limited = Array.isArray(apiData) ? apiData.slice(0, 3) : [];
-        const palette = ['#cf66e4', '#55c0b5', '#fdd835', '#ff8a65', '#64b5f6'];
-        const processed: OEMPerformanceProps[] = limited.map((item, idx) => ({
-          name: item.name,
-          percentage: Math.round(item.percentage * 100) / 100,
-          color: palette[idx % palette.length],
-        }));
-        setOemData(processed);
-      } catch (e) {
-        console.error('Failed to fetch OEM performance', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return <div className="oem-perf-card" style={{ height: '100px' }}>Loading...</div>;
-  }
-
   return (
     <div className="oem-perf-card">
       <div className="oem-perf-header">
         <span className="oem-perf-title">Performance by OEM</span>
       </div>
       <div className="oem-perf-list">
-        {oemData.map((item, idx) => (
+        {staticOemData.map((item, idx) => (
           <OEMPerformanceItem key={idx} {...item} />
         ))}
       </div>
@@ -67,3 +44,9 @@ const PerformanceByOEM: React.FC = () => {
 };
 
 export default PerformanceByOEM;
+
+/*
+// Previous dynamic implementation (commented out for static mode)
+import React, { useEffect, useState } from 'react';
+// useEffect(() => { fetch('/api/charts/oem-performance') ... })
+*/

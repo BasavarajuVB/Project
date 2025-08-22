@@ -29,32 +29,15 @@ const MetricCard: React.FC<MetricCardProps> = ({ label, value, change, isPositiv
 };
 
 const MetricsCards: React.FC = () => {
-  const [totalMeters, setTotalMeters] = useState<string>('—');
-  const [isFetching, setIsFetching] = useState<boolean>(true);
+  // Static total meters for now
+  const [totalMeters] = useState<string>('25,489');
   const [successRate, setSuccessRate] = useState<string>('—');
   const [failedRate, setFailedRate] = useState<string>('—');
   const [timeDuration, setTimeDuration] = useState<string>('—');
 
   useEffect(() => {
     let isMounted = true;
-    const fetchCount = async () => {
-      try {
-        const res = await fetch('/api/dp/meterscount', { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const text = await res.text();
-        const num = Number(text);
-        const formatted = Number.isFinite(num) ? num.toLocaleString() : '—';
-        if (!isMounted) return;
-        setTotalMeters(prev => (prev === formatted ? prev : formatted));
-      } catch (e) {
-        if (!isMounted) return;
-        setTotalMeters('—');
-        console.error('Failed to fetch meters count', e);
-      } finally {
-        if (!isMounted) return;
-        setIsFetching(false);
-      }
-    };
+    // fetchCount removed for static total meters
     const fetchSuccess = async () => {
       try {
         const res = await fetch('/api/dp/meterscount/success', { cache: 'no-store' });
@@ -91,18 +74,14 @@ const MetricsCards: React.FC = () => {
         console.error('Failed to fetch duration', e);
       }
     };
-    // initial load
-    setIsFetching(true);
-    fetchCount();
+    // initial load (totalMeters is static)
     fetchSuccess();
     fetchDuration();
     // poll every 10s
-    const intervalId = setInterval(fetchCount, 10000);
     const intervalId2 = setInterval(fetchSuccess, 10000);
     const intervalId3 = setInterval(fetchDuration, 10000);
     return () => {
       isMounted = false;
-      clearInterval(intervalId);
       clearInterval(intervalId2);
       clearInterval(intervalId3);
     };
