@@ -3,8 +3,12 @@
 import React from 'react';
 import AssetDashboard from './AssetDashboard';
 
-const PageHome: React.FC = () => {
-  return <AssetDashboard />;
+interface PageHomeProps {
+  copilotOpen?: boolean;
+}
+
+const PageHome: React.FC<PageHomeProps> = ({ copilotOpen = false }) => {
+  return <AssetDashboard copilotOpen={copilotOpen} />;
 };
 
 export default PageHome; 

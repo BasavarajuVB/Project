@@ -576,7 +576,7 @@ body * {
 
 /* When Copilot is open, reserve space for the full-height panel */
 .main-content.copilot-open {
-  margin-right: 380px; /* match .copilot-widget width */
+  margin-right: 320px; /* reduced from 380px to minimize empty space */
 }
 
 /* Responsive main content */

@@ -223,7 +223,7 @@ export default function Dashboard() {
       <Layout>
         <Content className={`main-content ${!isMobile && sidebarCollapsed ? 'collapsed-sidebar' : ''} ${copilotOpen ? 'copilot-open' : ''}`}>
           {currentPage === 'home' && (
-            <PageHome />
+            <PageHome copilotOpen={copilotOpen} />
           )}
 
           {currentPage === 'data-push' && (
