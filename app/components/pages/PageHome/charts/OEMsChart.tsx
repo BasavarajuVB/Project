@@ -9,42 +9,46 @@ const OEMsChart: React.FC = () => {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   const data = [
+    
+      { 
+        name: 'Adya', 
+        total: 610,
+        segment1: 520,
+        segment2: 90
+      },
+  
+    
     { 
-      name: 'Adya Smart Metering', 
-      total: 12345,
-      segment1: 8000,
-      segment2: 4345,
-      segment3: 0
+      name: 'Genus', 
+      total: 240,
+      segment1: 180,
+      segment2: 60,
+     
     },
     { 
-      name: 'Adani', 
-      total: 6511,
-      segment1: 4000,
-      segment2: 2000,
-      segment3: 511
+      name: 'HPL', 
+      total: 150,
+      segment1: 150,
+      // segment2: 2500,
+     
     },
-    { 
-      name: 'Polaris', 
-      total: 8214,
-      segment1: 5000,
-      segment2: 2500,
-      segment3: 714
-    },
-    { 
-      name: 'Schneider', 
-      total: 10411,
-      segment1: 6000,
-      segment2: 3000,
-      segment3: 1411
-    },
-    { 
-      name: 'Eastron', 
-      total: 10217,
-      segment1: 6000,
-      segment2: 3000,
-      segment3: 1217
-    },
+    // { 
+    //   name: 'Schneider', 
+    //   total: 10411,
+    //   segment1: 6000,
+    //   segment2: 3000,
+    //   segment3: 1411
+    // },
+    // { 
+    //   name: 'Eastron', 
+    //   total: 10217,
+    //   segment1: 6000,
+    //   segment2: 3000,
+    //   segment3: 1217
+    // },
   ];
+
+  // Auto-scale Y-axis to current values
 
   const handleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -104,11 +108,10 @@ const OEMsChart: React.FC = () => {
               stroke="#ffffff"
               fontSize={12}
               tick={{ fill: '#ffffff', fontWeight: 600, fontSize: 12 }}
-              tickFormatter={(value) => `${(value / 1000).toFixed(0)}K`}
-              domain={[0, 20000]}
-              ticks={[0, 7000, 13000, 20000]}
+              domain={[0, 'dataMax']}
               axisLine={{ stroke: '#ffffff', strokeWidth: 1 }}
               tickLine={{ stroke: '#ffffff', strokeWidth: 1 }}
+              allowDecimals={false}
             />
             <CartesianGrid 
               strokeDasharray="3 3" 

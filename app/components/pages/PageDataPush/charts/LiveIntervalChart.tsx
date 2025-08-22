@@ -107,13 +107,13 @@ interface IntervalPoint {
 
 // Static data for now; dynamic fetching code is commented below
 const staticData: IntervalPoint[] = [
-  { label: 'Jan 01 08:00', success: 85, failure: 15 },
-  { label: 'Jan 01 09:00', success: 91, failure: 9 },
-  { label: 'Jan 01 10:00', success: 75, failure: 25 },
-  { label: 'Jan 01 11:00', success: 80, failure: 20 },
-  { label: 'Jan 01 12:00', success: 85, failure: 15 },
-  { label: 'Jan 01 13:00', success: 68, failure: 32 },
-  { label: 'Jan 01 14:00', success: 95, failure: 5 },
+  { label: '08:00', success: 85, failure: 15 },
+  { label: '09:00', success: 91, failure: 9 },
+  { label: '10:00', success: 75, failure: 25 },
+  { label: '11:00', success: 80, failure: 20 },
+  { label: '12:00', success: 85, failure: 15 },
+  { label: '13:00', success: 68, failure: 32 },
+  { label: '14:00', success: 95, failure: 5 },
 ];
 
 const LiveIntervalChart: React.FC = () => {
@@ -130,8 +130,8 @@ const LiveIntervalChart: React.FC = () => {
             <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fill: '#8fa8c2', fontSize: 12 }} />
             <YAxis axisLine={false} tickLine={false} tick={{ fill: '#8fa8c2', fontSize: 12 }} domain={[0, 100]} />
             <Legend wrapperStyle={{ color: '#8fa8c2', fontSize: '12px', paddingTop: '10px' }} />
-            <Bar dataKey="success" stackId="a" fill="#66BB6A" name="Success" radius={[0, 0, 0, 0]} isAnimationActive={false} />
-            <Bar dataKey="failure" stackId="a" fill="#D63B46" name="Failure" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+            <Bar dataKey="success" stackId="a" fill="#66BB6A" name="Success" radius={[0, 0, 0, 0]} isAnimationActive={true} animationDuration={350} animationEasing="ease-out" />
+            <Bar dataKey="failure" stackId="a" fill="#D63B46" name="Failure" radius={[4, 4, 0, 0]} isAnimationActive={true} animationDuration={350} animationEasing="ease-out" />
           </BarChart>
         </ResponsiveContainer>
       </div>

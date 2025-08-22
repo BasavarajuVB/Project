@@ -32,13 +32,13 @@ const KeyMetricsCards: React.FC = () => {
     <div className={styles.metricsCardsGrid}>
       <MetricCard 
         title="Total meters" 
-        value="12,34,567" 
+        value="1000" 
         className={styles.totalMeters}
       />
       
       <MetricCard 
         title="Single-phase" 
-        value="12,34,508" 
+        value="840" 
         onlinePercentage="98%" 
         isOnline={true}
         className={styles.singlePhase}
@@ -46,7 +46,7 @@ const KeyMetricsCards: React.FC = () => {
       
       <MetricCard 
         title="Three-phase" 
-        value="12,345" 
+        value="160" 
         onlinePercentage="76%" 
         isOnline={true}
         className={styles.threePhase}
@@ -54,7 +54,7 @@ const KeyMetricsCards: React.FC = () => {
       
       <MetricCard 
         title="DCU" 
-        value="12,345" 
+        value="5" 
         onlinePercentage="93%" 
         isOnline={true}
         className={styles.dcu}
@@ -62,7 +62,7 @@ const KeyMetricsCards: React.FC = () => {
       
       <MetricCard 
         title="Repeaters" 
-        value="12,345" 
+        value="12" 
         onlinePercentage="98%" 
         isOnline={true}
         className={styles.repeaters}

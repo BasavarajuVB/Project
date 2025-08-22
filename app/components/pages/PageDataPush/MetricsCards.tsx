@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 interface MetricCardProps {
   label: string;
@@ -29,63 +29,11 @@ const MetricCard: React.FC<MetricCardProps> = ({ label, value, change, isPositiv
 };
 
 const MetricsCards: React.FC = () => {
-  // Static total meters for now
-  const [totalMeters] = useState<string>('25,489');
-  const [successRate, setSuccessRate] = useState<string>('—');
-  const [failedRate, setFailedRate] = useState<string>('—');
-  const [timeDuration, setTimeDuration] = useState<string>('—');
-
-  useEffect(() => {
-    let isMounted = true;
-    // fetchCount removed for static total meters
-    const fetchSuccess = async () => {
-      try {
-        const res = await fetch('/api/dp/meterscount/success', { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        const sp = typeof data?.successPercentage === 'number' ? data.successPercentage : null;
-        const numericSuccess = sp === null ? null : (sp === 0 ? 96.06 : Number(sp));
-        const successToShow = numericSuccess === null || !Number.isFinite(numericSuccess)
-          ? '—'
-          : numericSuccess.toFixed(2);
-        const numericFailure = numericSuccess === null || !Number.isFinite(numericSuccess)
-          ? null
-          : 100 - numericSuccess;
-        const failureToShow = numericFailure === null ? '—' : numericFailure.toFixed(2);
-        if (!isMounted) return;
-        setSuccessRate(prev => (prev === successToShow ? prev : successToShow));
-        setFailedRate(prev => (prev === failureToShow ? prev : failureToShow));
-      } catch (e) {
-        if (!isMounted) return;
-        console.error('Failed to fetch success percentage', e);
-      }
-    };
-    const fetchDuration = async () => {
-      try {
-        const res = await fetch('/api/dp/duration', { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        const ds = typeof data?.durationSeconds === 'number' ? data.durationSeconds : null;
-        const valueToShow = ds === null ? '1.5' : (ds / 60).toFixed(1);
-        if (!isMounted) return;
-        setTimeDuration(prev => (prev === valueToShow ? prev : valueToShow));
-      } catch (e) {
-        if (!isMounted) return;
-        console.error('Failed to fetch duration', e);
-      }
-    };
-    // initial load (totalMeters is static)
-    fetchSuccess();
-    fetchDuration();
-    // poll every 10s
-    const intervalId2 = setInterval(fetchSuccess, 10000);
-    const intervalId3 = setInterval(fetchDuration, 10000);
-    return () => {
-      isMounted = false;
-      clearInterval(intervalId2);
-      clearInterval(intervalId3);
-    };
-  }, []);
+  // Fully static values (no API calls)
+  const [totalMeters] = useState<string>('1000');
+  const [successRate] = useState<string>('92.00');
+  const [failedRate] = useState<string>('8.00');
+  const [timeDuration] = useState<string>('1.5');
 
   return (
     <div className="metrics-grid">
@@ -93,7 +41,7 @@ const MetricsCards: React.FC = () => {
       <MetricCard label="Interval Read Success Rate" value={successRate} unit="%" colorClass="success-rate" />
       <MetricCard label="Failed Reads" value={failedRate} unit="%" colorClass="failed-reads" />
       <MetricCard label="Time Duration" value={timeDuration} unit=" min" colorClass="time-duration" />
-      <MetricCard label="Predicted Daily Meters" value="754" change="2.02%" isPositive={false} colorClass="predicted-meters" />
+      <MetricCard label="Predicted Daily Meters" value="16" change="2.02%" isPositive={false} colorClass="predicted-meters" />
     </div>
   );
 };

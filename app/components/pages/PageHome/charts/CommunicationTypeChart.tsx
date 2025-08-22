@@ -14,9 +14,9 @@ const CommunicationTypeChart: React.FC = () => {
   }, []);
 
   const data = [
-    { name: 'RF', value: 25, color: '#FF6B35' },
-    { name: 'Cellular', value: 30, color: '#1890ff' },
-    { name: 'NBIoT', value: 45, color: '#52c41a' },
+    { name: 'RF', value: 27, color: '#FF6B35' },
+    { name: 'Cellular', value: 73, color: '#1890ff' },
+    // { name: 'NBIoT', value: 45, color: '#52c41a' },
   ];
 
   const COLORS = data.map(item => item.color);
