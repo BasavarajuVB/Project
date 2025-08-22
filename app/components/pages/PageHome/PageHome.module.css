@@ -677,6 +677,38 @@
   } 
 }
 
+/* API Data Display styles */
+.apiDataDisplay {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background: #0A2949;
+  border-radius: 8px;
+  border: 1px solid #1e3a5f;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.apiDataItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.apiDataLabel {
+  font-size: 12px;
+  color: #8BA3C7;
+  font-weight: 500;
+}
+
+.apiDataValue {
+  font-size: 18px;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
 @media (max-width: 1200px) { 
   .assetDashboard { 
     gap: 14px; 
@@ -720,6 +752,12 @@
   .buttonsGroup { 
     justify-content: center; 
   } 
+  .apiDataDisplay {
+    flex-direction: column;
+    gap: 16px;
+    padding: 12px 16px;
+    align-items: center;
+  }
   .metricsCardsGrid { 
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
     gap: 10px; 
@@ -752,6 +790,10 @@
     padding: 10px 12px; 
     margin-bottom: 12px; 
   } 
+  .apiDataDisplay {
+    padding: 10px 12px;
+    margin-bottom: 12px;
+  }
   .metricsCardsGrid { 
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
     gap: 8px; 
