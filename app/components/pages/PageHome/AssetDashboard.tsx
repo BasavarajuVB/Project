@@ -29,7 +29,7 @@ const AssetDashboard: React.FC<AssetDashboardProps> = ({ copilotOpen = false }) 
   // const [error, setError] = useState<string | null>(null);
 
   // Static Data for Display
-  const meterTypes = ["THREE_PHASE", "SINGLE_PHASE"];
+  const meterTypes = ["Single Phase", "Three Phase"];
   const manufacturers = [
     { manufacturerId: 1, manufacturerName: "Adya Smart Metering" },
     { manufacturerId: 2, manufacturerName: "HPL Meters" },

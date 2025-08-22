@@ -1,6 +1,6 @@
 /* Asset Dashboard Styles */
 .assetDashboard {
-  padding: 24px;
+  padding: 8px 24px 24px 8px;
   background: #1e3a5f;
   min-height: calc(100vh - 64px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -45,10 +45,10 @@
   justify-content: space-between;
   align-items: center;
   background: transparent !important;
-  padding: 16px 24px;
+  padding: 8px 0;
   border-radius: 8px;
-  margin-bottom: 20px;
-  gap: 16px;
+  margin-bottom: 14px;
+  gap: 12px;
   flex-wrap: wrap;
   transition: all 0.3s cubic-bezier(0.4, 0, 2, 1);
 }
@@ -59,7 +59,7 @@
   align-items: center !important;
   justify-content: space-between !important;
   gap: 8px !important;
-  padding: 10px 12px !important;
+  padding: 6px 0 !important;
 }
 
 .assetDashboard.copilotOpen .filtersSection .dropdownsGroup {
@@ -841,7 +841,7 @@
 @media (max-width: 1200px) { 
   .assetDashboard { 
     gap: 14px; 
-    padding: 16px; 
+    padding: 8px 16px 16px 16px; 
   } 
   .chartRow { 
     gap: 14px; 
@@ -851,7 +851,7 @@
     gap: 14px; 
   } 
   .filtersSection { 
-    padding: 16px 20px; 
+    padding: 8px 0; 
   } 
 }
 
@@ -871,9 +871,9 @@
 @media (max-width: 768px) { 
   .filtersSection { 
     flex-direction: column; 
-    gap: 12px; 
+    gap: 10px; 
     align-items: stretch; 
-    padding: 12px 16px; 
+    padding: 8px 0; 
   } 
   .dropdownsGroup { 
     justify-content: center; 
@@ -912,12 +912,12 @@
 
 @media (max-width: 480px) { 
   .assetDashboard { 
-    padding: 12px; 
+    padding: 8px 12px 12px 12px; 
     gap: 12px; 
   } 
   .filtersSection { 
-    padding: 10px 12px; 
-    margin-bottom: 12px; 
+    padding: 6px 0; 
+    margin-bottom: 10px; 
   } 
   .apiDataDisplay {
     padding: 10px 12px;
