@@ -72,7 +72,9 @@ const CommunicationTypeChart: React.FC = () => {
       </div>
       
       <div className={styles.chartContainer}>
-        {isClient && (
+        {!isClient ? (
+          <div className={styles.chartLoading}>Loading chart...</div>
+        ) : (
           <>
             <div className={styles.pieChartSection}>
               <PieChart width={isExpanded ? 300 : 180} height={isExpanded ? 300 : 180}>

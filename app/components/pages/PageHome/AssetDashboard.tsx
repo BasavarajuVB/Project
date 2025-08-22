@@ -1,6 +1,6 @@
 'use client';
 
-import React,{useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Select, Button } from 'antd';
 import KeyMetricsCards from './KeyMetricsCards';
 import CommunicationTypeChart from './charts/CommunicationTypeChart';
@@ -17,30 +17,31 @@ interface AssetDashboardProps {
 
 const AssetDashboard: React.FC<AssetDashboardProps> = ({ copilotOpen = false }) => {
 
-// API State Variables (commented out for static data usage)
-// const [meterTypes, setMeterTypes] = useState<string[]>([]);
-// const [manufacturers, setManufacturers] = useState<Array<{manufacturerId: number, manufacturerName: string}>>([]);
-// const [meterModels, setMeterModels] = useState<string[]>([]);
-// const [nicTypes, setNicTypes] = useState<Array<{nicType: string}>>([]);
-// const [totalAssets, setTotalAssets] = useState<string>('—');
-// const [assetHealth, setAssetHealth] = useState<string>('—');
-// const [loading, setLoading] = useState(true);
-// const [error, setError] = useState<string | null>(null);
 
-// Static Data for Display
-const meterTypes = ["THREE_PHASE", "SINGLE_PHASE"];
-const manufacturers = [
-  { manufacturerId: 1, manufacturerName: "Adya Smart Metering" },
-  { manufacturerId: 2, manufacturerName: "HPL Meters" },
-  { manufacturerId: 3, manufacturerName: "Genus Meters" },
-  { manufacturerId: 4, manufacturerName: "Secure Meters" }
-];
-const meterModels = ["ASM231", "ASM211", "HPL1P", "HPL3P", "GNS1P", "GNS3P", "SCR1P", "SCR3P","hemangi"];
-const nicTypes = [{ nicType: "GSM" }, { nicType: "RF" }];
-const totalAssets = "15,847";
-const assetHealth = "94.2";
-const loading = false;
-const error = null;
+  // API State Variables (commented out for static data usage)
+  // const [meterTypes, setMeterTypes] = useState<string[]>([]);
+  // const [manufacturers, setManufacturers] = useState<Array<{manufacturerId: number, manufacturerName: string}>>([]);
+  // const [meterModels, setMeterModels] = useState<string[]>([]);
+  // const [nicTypes, setNicTypes] = useState<Array<{nicType: string}>>([]);
+  // const [totalAssets, setTotalAssets] = useState<string>('—');
+  // const [assetHealth, setAssetHealth] = useState<string>('—');
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState<string | null>(null);
+
+  // Static Data for Display
+  const meterTypes = ["THREE_PHASE", "SINGLE_PHASE"];
+  const manufacturers = [
+    { manufacturerId: 1, manufacturerName: "Adya Smart Metering" },
+    { manufacturerId: 2, manufacturerName: "HPL Meters" },
+    { manufacturerId: 3, manufacturerName: "Genus Meters" },
+    { manufacturerId: 4, manufacturerName: "Secure Meters" }
+  ];
+  const meterModels = ["ASM231", "ASM211", "HPL1P", "HPL3P", "GNS1P", "GNS3P", "SCR1P", "SCR3P","hemangi"];
+  const nicTypes = [{ nicType: "GSM" }, { nicType: "RF" }];
+  const totalAssets = "15,847";
+  const assetHealth = "94.2";
+  const loading = false;
+  const error = null;
 
   // useEffect(() => {
   //   let isMounted = true;
