@@ -36,7 +36,7 @@ const AssetDashboard: React.FC<AssetDashboardProps> = ({ copilotOpen = false }) 
     { manufacturerId: 3, manufacturerName: "Genus Meters" },
     { manufacturerId: 4, manufacturerName: "Secure Meters" }
   ];
-  const meterModels = ["ASM231", "ASM211", "HPL1P", "HPL3P", "GNS1P", "GNS3P", "SCR1P", "SCR3P","hemangi"];
+  const meterModels = ["ASM231", "ASM211", "HPL1P", "HPL3P", "GNS1P", "GNS3P", "SCR1P", "SCR3P"];
   const nicTypes = [{ nicType: "GSM" }, { nicType: "RF" }];
   const totalAssets = "15,847";
   const assetHealth = "94.2";
