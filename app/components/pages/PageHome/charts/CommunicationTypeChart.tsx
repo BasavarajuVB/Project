@@ -5,19 +5,23 @@ import { PieChart, Pie, Cell, Tooltip, LabelList } from 'recharts';
 import { ExpandOutlined, CloseOutlined } from '@ant-design/icons';
 import styles from '../PageHome.module.css';
 
-const CommunicationTypeChart: React.FC = () => {
+interface CommunicationTypeData {
+  name: string;
+  value: number;
+  color: string;
+}
+
+interface CommunicationTypeChartProps {
+  data: CommunicationTypeData[];
+}
+
+const CommunicationTypeChart: React.FC<CommunicationTypeChartProps> = ({ data }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [isClient, setIsClient] = React.useState(false);
 
   React.useEffect(() => {
     setIsClient(true);
   }, []);
-
-  const data = [
-    { name: 'RF', value: 27, color: '#FF6B35' },
-    { name: 'Cellular', value: 73, color: '#1890ff' },
-    // { name: 'NBIoT', value: 45, color: '#52c41a' },
-  ];
 
   const COLORS = data.map(item => item.color);
 

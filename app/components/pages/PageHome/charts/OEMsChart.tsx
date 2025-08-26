@@ -5,48 +5,20 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, LabelList, C
 import { ExpandOutlined, CloseOutlined } from '@ant-design/icons';
 import styles from '../PageHome.module.css';
 
-const OEMsChart: React.FC = () => {
-  const [isExpanded, setIsExpanded] = React.useState(false);
+interface OEMData {
+  name: string;
+  total: number;
+  segment1: number;
+  segment2?: number;
+  segment3?: number;
+}
 
-  const data = [
-    
-      { 
-        name: 'Adya', 
-        total: 610,
-        segment1: 520,
-        segment2: 90
-      },
-  
-    
-    { 
-      name: 'Genus', 
-      total: 240,
-      segment1: 180,
-      segment2: 60,
-     
-    },
-    { 
-      name: 'HPL', 
-      total: 150,
-      segment1: 150,
-      // segment2: 2500,
-     
-    },
-    // { 
-    //   name: 'Schneider', 
-    //   total: 10411,
-    //   segment1: 6000,
-    //   segment2: 3000,
-    //   segment3: 1411
-    // },
-    // { 
-    //   name: 'Eastron', 
-    //   total: 10217,
-    //   segment1: 6000,
-    //   segment2: 3000,
-    //   segment3: 1217
-    // },
-  ];
+interface OEMsChartProps {
+  data: OEMData[];
+}
+
+const OEMsChart: React.FC<OEMsChartProps> = ({ data }) => {
+  const [isExpanded, setIsExpanded] = React.useState(false);
 
   // Auto-scale Y-axis to current values
 
@@ -126,8 +98,8 @@ const OEMsChart: React.FC = () => {
             />
             <Tooltip 
               formatter={(value, name) => {
-                if (name === 'segment1') return [value.toLocaleString(), 'Segment 1'];
-                if (name === 'segment2') return [value.toLocaleString(), 'Segment 2'];
+                if (name === 'segment1') return [value.toLocaleString(), 'Single Phase'];
+                if (name === 'segment2') return [value.toLocaleString(), 'Three Phase'];
                 if (name === 'segment3') return [value.toLocaleString(), 'Segment 3'];
                 return [value.toLocaleString(), 'Total'];
               }}
@@ -192,3 +164,6 @@ const OEMsChart: React.FC = () => {
 };
 
 export default OEMsChart; 
+
+
+
