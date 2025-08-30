@@ -1,11 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const response = await fetch('http://103.114.154.128:30808/ad/manufacturernames', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      cache: 'no-store'
     });
 
     if (!response.ok) {
@@ -15,9 +13,9 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error('Error fetching manufacturer names:', error);
+    console.error('Error fetching manufacturers:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch manufacturer names' },
+      { error: 'Failed to fetch manufacturers' },
       { status: 500 }
     );
   }

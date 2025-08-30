@@ -1,11 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const response = await fetch('http://103.114.154.128:30808/ad/nictypenames', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      cache: 'no-store'
     });
 
     if (!response.ok) {
@@ -15,9 +13,9 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error('Error fetching NIC type names:', error);
+    console.error('Error fetching NIC types:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch NIC type names' },
+      { error: 'Failed to fetch NIC types' },
       { status: 500 }
     );
   }

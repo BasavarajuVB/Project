@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useMemo } from 'react';
-import { Select, Button } from 'antd';
+import { Select, Button, Modal } from 'antd';
 import KeyMetricsCards from './KeyMetricsCards';
 import CommunicationTypeChart from './charts/CommunicationTypeChart';
 import OEMsChart from './charts/OEMsChart';
@@ -41,37 +41,297 @@ const AssetDashboard: React.FC<AssetDashboardProps> = ({ copilotOpen = false }) 
     connectivity: 'all'
   });
 
-  // API State Variables (commented out for static data usage)
-  // const [meterTypes, setMeterTypes] = useState<string[]>([]);
-  // const [manufacturers, setManufacturers] = useState<Array<{manufacturerId: number, manufacturerName: string}>>([]);
-  // const [meterModels, setMeterModels] = useState<string[]>([]);
-  // const [nicTypes, setNicTypes] = useState<Array<{nicType: string}>>([]);
-  // const [totalAssets, setTotalAssets] = useState<string>('—');
-  // const [assetHealth, setAssetHealth] = useState<string>('—');
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState<string | null>(null);
+  // API State Variables - only manufacturer for now
+  const [manufacturers, setManufacturers] = useState<Array<{manufacturerId: number, manufacturerName: string}>>([]);
+  const [manufacturerLoading, setManufacturerLoading] = useState(true);
+  const [manufacturerError, setManufacturerError] = useState<string | null>(null);
+  const [showEmptyDataModal, setShowEmptyDataModal] = useState(false);
 
-  // Static Data for Display
-  const meterTypes = ["Single Phase", "Three Phase"];
-  const manufacturers = [
-    { manufacturerId: 1, manufacturerName: "Adya Smart Metering" },
-    { manufacturerId: 2, manufacturerName: "HPL Meters" },
-    { manufacturerId: 3, manufacturerName: "Genus Meters" },
-   // { manufacturerId: 4, manufacturerName: "Secure Meters" }
-  ];
-  const meterModels = ["ASM231", "ASM211", "HPL1P", "HPL3P", "GNS1P", "GNS3P", "SCR1P", "SCR3P"];
-  const nicTypes = [{ nicType: "GSM" }, { nicType: "RF" }];
-  const totalAssets = "15,847";
-  const assetHealth = "94.2";
-  const loading = false;
-  const error = null;
+  // API State Variables for models
+  const [meterModels, setMeterModels] = useState<string[]>([]);
+  const [modelLoading, setModelLoading] = useState(true);
+  const [modelError, setModelError] = useState<string | null>(null);
+
+  // API State Variables for types
+  const [meterTypes, setMeterTypes] = useState<string[]>([]);
+  const [typeLoading, setTypeLoading] = useState(true);
+  const [typeError, setTypeError] = useState<string | null>(null);
+
+  // API State Variables for connectivity
+  const [nicTypes, setNicTypes] = useState<Array<{nicType: string}>>([]);
+  const [connectivityLoading, setConnectivityLoading] = useState(true);
+  const [connectivityError, setConnectivityError] = useState<string | null>(null);
+
+  // All filters are now API-driven - no more static data
+
+  // Fetch only manufacturer data from API
+  useEffect(() => {
+    let isMounted = true;
+    
+    const fetchManufacturers = async () => {
+      try {
+        setManufacturerLoading(true);
+        
+        const response = await fetch('/api/ad/manufacturernames', { 
+          cache: 'no-store' 
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Manufacturer API failed: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!isMounted) return;
+        
+        // Check if manufacturer data is empty
+        if (!data?.length) {
+          setShowEmptyDataModal(true);
+          setManufacturerError('Manufacturer data is empty');
+        } else {
+          setManufacturers(data);
+          setManufacturerError(null);
+        }
+        
+      } catch (e) {
+        if (!isMounted) return;
+        setManufacturerError('Failed to fetch manufacturer data');
+        setShowEmptyDataModal(true);
+      } finally {
+        if (!isMounted) return;
+        setManufacturerLoading(false);
+      }
+    };
+
+    fetchManufacturers();
+    const intervalId = setInterval(fetchManufacturers, 10000);
+    
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  // Fetch meter models data from API
+  useEffect(() => {
+    let isMounted = true;
+    
+    const fetchMeterModels = async () => {
+      try {
+        setModelLoading(true);
+        
+        const response = await fetch('/api/ad/metermodels', { 
+          cache: 'no-store' 
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Model API failed: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!isMounted) return;
+        
+        // Check if model data is empty
+        if (!data?.length) {
+          setShowEmptyDataModal(true);
+          setModelError('Model data is empty');
+        } else {
+          setMeterModels(data);
+          setModelError(null);
+        }
+        
+      } catch (e) {
+        if (!isMounted) return;
+        setShowEmptyDataModal(true);
+        setModelError('Failed to fetch model data');
+      } finally {
+        if (!isMounted) return;
+        setModelLoading(false);
+      }
+    };
+
+    fetchMeterModels();
+    const intervalId = setInterval(fetchMeterModels, 10000);
+    
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  // Fetch meter types data from API
+  useEffect(() => {
+    let isMounted = true;
+    
+    const fetchMeterTypes = async () => {
+      try {
+        setTypeLoading(true);
+        
+        const response = await fetch('/api/ad/metertypes', { 
+          cache: 'no-store' 
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Type API failed: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!isMounted) return;
+        
+        // Check if type data is empty
+        if (!data?.length) {
+          setShowEmptyDataModal(true);
+          setTypeError('Type data is empty');
+        } else {
+          setMeterTypes(data);
+          setTypeError(null);
+        }
+        
+      } catch (e) {
+        if (!isMounted) return;
+        setShowEmptyDataModal(true);
+        setTypeError('Failed to fetch type data');
+      } finally {
+        if (!isMounted) return;
+        setTypeLoading(false);
+      }
+    };
+
+    fetchMeterTypes();
+    const intervalId = setInterval(fetchMeterTypes, 10000);
+    
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  // Fetch connectivity data from API
+  useEffect(() => {
+    let isMounted = true;
+    
+    const fetchConnectivity = async () => {
+      try {
+        setConnectivityLoading(true);
+        
+        const response = await fetch('/api/ad/nictypenames', { 
+          cache: 'no-store' 
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Connectivity API failed: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!isMounted) return;
+        
+        // Check if connectivity data is empty
+        if (!data?.length) {
+          setShowEmptyDataModal(true);
+          setConnectivityError('Connectivity data is empty');
+        } else {
+          console.log('Processing connectivity data:', data);
+          setNicTypes(data.map((nic: string) => ({ nicType: nic })));
+          setConnectivityError(null);
+        }
+        
+      } catch (e) {
+        if (!isMounted) return;
+        setShowEmptyDataModal(true);
+        setConnectivityError('Failed to fetch connectivity data');
+      } finally {
+        if (!isMounted) return;
+        setConnectivityLoading(false);
+      }
+    };
+
+    fetchConnectivity();
+    const intervalId = setInterval(fetchConnectivity, 10000);
+    
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
 
   // Filter change handlers
   const handleFilterChange = (filterType: keyof FilterState, value: string) => {
-    setFilters(prev => ({
-      ...prev,
+    const newFilters = {
+      ...filters,
       [filterType]: value
-    }));
+    };
+    
+    setFilters(newFilters);
+    
+    // Use intelligent filtering to update other dropdowns
+    fetchFilteredDropdownValues(newFilters);
+  };
+
+  // Fetch filtered dropdown values based on current filter selections
+  // This provides intelligent filtering where dropdown options are context-aware
+  // When user selects a filter, other dropdowns show only valid combinations
+  const fetchFilteredDropdownValues = async (currentFilters: FilterState) => {
+    try {
+      // Build query parameters for the filtered API
+      const queryParams = new URLSearchParams();
+      
+      if (currentFilters.connectivity !== 'all') {
+        queryParams.append('nictype', JSON.stringify([currentFilters.connectivity.toUpperCase()]));
+      }
+      if (currentFilters.model !== 'all') {
+        queryParams.append('modelname', JSON.stringify([currentFilters.model.toUpperCase()]));
+      }
+      if (currentFilters.type !== 'all') {
+        queryParams.append('metertype', JSON.stringify([currentFilters.type.toUpperCase()]));
+      }
+      if (currentFilters.manufacturer !== 'all') {
+        // Convert back from kebab-case to proper name
+        const manufacturerName = currentFilters.manufacturer
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+        queryParams.append('manufacturername', JSON.stringify([manufacturerName]));
+      }
+      
+      const response = await fetch(`/api/ad/dropdownvaluesfiltered?${queryParams.toString()}`, {
+        cache: 'no-store'
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Filtered API failed: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Filtered dropdown values:', data);
+      
+      // Update dropdowns with filtered values if they have data
+      if (data.manufacturer?.length) {
+        const manufacturerData = data.manufacturer.map((name: string, index: number) => ({
+          manufacturerId: index + 1,
+          manufacturerName: name
+        }));
+        setManufacturers(manufacturerData);
+      }
+      
+      if (data.model?.length) {
+        setMeterModels(data.model);
+      }
+      
+      if (data.type?.length) {
+        setMeterTypes(data.type);
+      }
+      
+      if (data.connectivity?.length) {
+        setNicTypes(data.connectivity.map((nic: string) => ({ nicType: nic })));
+      }
+      
+    } catch (error) {
+      console.error('Failed to fetch filtered dropdown values:', error);
+      // Fall back to individual API calls if filtered API fails
+    }
   };
 
   // Calculate filtered data for charts only using useMemo to prevent unnecessary recalculations
@@ -121,11 +381,11 @@ const AssetDashboard: React.FC<AssetDashboardProps> = ({ copilotOpen = false }) 
       let filteredOem = { ...oem };
       
       if (filters.type !== 'all') {
-        if (filters.type === 'single-phase') {
+        if (filters.type === 'single_phase') {
           // Show only Single Phase (segment1)
           filteredOem.total = filteredOem.segment1;
           filteredOem.segment2 = 0;
-        } else if (filters.type === 'three-phase') {
+        } else if (filters.type === 'three_phase') {
           // Show only Three Phase (segment2)
           filteredOem.total = filteredOem.segment2 || 0;
           filteredOem.segment1 = 0;
@@ -145,158 +405,6 @@ const AssetDashboard: React.FC<AssetDashboardProps> = ({ copilotOpen = false }) 
       oems: filteredOEMs
     };
   }, [filters]); // Only recalculate when filters change
-
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   const fetchMeterTypes = async () => {
-  //     try {
-  //       const res = await fetch('/api/ad/metertypes', { cache: 'no-store' });
-  //       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  //       const data: string[] = await res.json();
-  //       if (!isMounted) return;
-  //       setMeterTypes(prev => (JSON.stringify(prev) === JSON.stringify(data) ? prev : data));
-  //     } catch (e) {
-  //       if (!isMounted) return;
-  //       console.error('Failed to fetch meter types', e);
-  //       setError('Failed to fetch meter types');
-  //     } finally {
-  //       if (!isMounted) return;
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchMeterTypes();
-  //   const intervalId = setInterval(fetchMeterTypes, 10000);
-  //   return () => {
-  //     isMounted = false;
-  //     clearInterval(intervalId);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   const fetchManufacturers = async () => {
-  //     try {
-  //       const res = await fetch('/api/ad/manufacturernames', { cache: 'no-store' });
-  //       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  //       const data: Array<{manufacturerId: number, manufacturerName: string}> = await res.json();
-  //       if (!isMounted) return;
-  //       setMeterTypes(prev => (JSON.stringify(prev) === JSON.stringify(data) ? prev : data));
-  //     } catch (e) {
-  //       if (!isMounted) return;
-  //       console.error('Failed to fetch manufacturers', e);
-  //       setError('Failed to fetch manufacturers');
-  //     }
-  //   };
-
-  //   fetchManufacturers();
-  //   const intervalId = setInterval(fetchManufacturers, 10000);
-  //   return () => {
-  //     isMounted = false;
-  //     clearInterval(intervalId);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   const fetchMeterModels = async () => {
-  //     try {
-  //       const res = await fetch('/api/ad/metermodels', { cache: 'no-store' });
-  //       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  //       const data: string[] = await res.json();
-  //       if (!isMounted) return;
-  //       setMeterModels(prev => (JSON.stringify(prev) === JSON.stringify(data) ? prev : data));
-  //     } catch (e) {
-  //       if (!isMounted) return;
-  //       console.error('Failed to fetch meter models', e);
-  //       setError('Failed to fetch meter models');
-  //     }
-  //   };
-
-  //   fetchMeterModels();
-  //   const intervalId = setInterval(fetchMeterModels, 10000);
-  //   return () => {
-  //     isMounted = false;
-  //     clearInterval(intervalId);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   const fetchNicTypes = async () => {
-  //     try {
-  //       const res = await fetch('/api/ad/nictypenames', { cache: 'no-store' });
-  //       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  //       const data: Array<{nicType: string}> = await res.json();
-  //       if (!isMounted) return;
-  //       setError('Failed to fetch NIC types');
-  //     } catch (e) {
-  //       if (!isMounted) return;
-  //       console.error('Failed to fetch NIC types', e);
-  //       setError('Failed to fetch NIC types');
-  //     }
-  //   };
-
-  //   fetchNicTypes();
-  //   const intervalId = setInterval(fetchNicTypes, 10000);
-  //   return () => {
-  //     isMounted = false;
-  //     clearInterval(intervalId);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   const fetchTotalAssets = async () => {
-  //     try {
-  //       const res = await fetch('/api/ad/totalassets', { cache: 'no-store' });
-  //       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  //       const text = await res.text();
-  //       const num = Number(text);
-  //       const formatted = Number.isFinite(num) ? num.toLocaleString() : '—';
-  //       if (!isMounted) return;
-  //       setTotalAssets(prev => (prev === formatted ? prev : formatted));
-  //     } catch (e) {
-  //       if (!isMounted) return;
-  //       console.error('Failed to fetch total assets', e);
-  //       setTotalAssets('—');
-  //     }
-  //   };
-
-  //   fetchTotalAssets();
-  //   const intervalId = setInterval(fetchTotalAssets, 10000);
-  //   return () => {
-  //     isMounted = false;
-  //     clearInterval(intervalId);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   const fetchAssetHealth = async () => {
-  //     try {
-  //       const res = await fetch('/api/ad/assethealth', { cache: 'no-store' });
-  //       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  //       const data = await res.json();
-  //       const health = typeof data?.healthPercentage === 'number' ? data.healthPercentage : null;
-  //       const healthToShow = health === null || !Number.isFinite(health) ? '—' : health.toFixed(2);
-  //       if (!isMounted) return;
-  //       setAssetHealth(prev => (prev === healthToShow ? prev : healthToShow));
-  //     } catch (e) {
-  //       if (!isMounted) return;
-  //       console.error('Failed to fetch asset health', e);
-  //       setAssetHealth('—');
-  //     }
-  //   };
-
-  //   fetchAssetHealth();
-  //   const intervalId = setInterval(fetchAssetHealth, 10000);
-  //   return () => {
-  //     isMounted = false;
-  //     clearInterval(intervalId);
-  //   };
-  // }, []);
-
 
   const handleExport = () => {
     // Export functionality
@@ -319,19 +427,38 @@ const AssetDashboard: React.FC<AssetDashboardProps> = ({ copilotOpen = false }) 
     console.log('Filters reset');
   };
 
+  const handleCloseModal = () => {
+    setShowEmptyDataModal(false);
+  };
+
   return (
     <div className={styles.assetDashboard}>
-
-
+      {/* Empty Data Modal */}
+      <Modal
+        title="Filter Data Warning"
+        open={showEmptyDataModal}
+        onOk={handleCloseModal}
+        onCancel={handleCloseModal}
+        okText="OK"
+        cancelText="Close"
+      >
+        <p>Some filter options are empty or unavailable. This may affect the filtering functionality.</p>
+        {manufacturerError && <p style={{ color: 'red' }}>Manufacturer Error: {manufacturerError}</p>}
+        {modelError && <p style={{ color: 'red' }}>Model Error: {modelError}</p>}
+        {typeError && <p style={{ color: 'red' }}>Type Error: {typeError}</p>}
+        {connectivityError && <p style={{ color: 'red' }}>Connectivity Error: {connectivityError}</p>}
+      </Modal>
 
       {/* Filters Section */}
       <div className={styles.filtersSection}>
         <div className={styles.dropdownsGroup}>
+          
           <Select 
             placeholder="Manufacturer" 
             style={{ width: 175 }}
             value={filters.manufacturer}
             onChange={(value) => handleFilterChange('manufacturer', value)}
+            loading={manufacturerLoading}
           >
             <Option value="all">All Manufacturers</Option>
             {manufacturers.map((manufacturer) => (
@@ -346,6 +473,7 @@ const AssetDashboard: React.FC<AssetDashboardProps> = ({ copilotOpen = false }) 
             style={{ width: 175 }}
             value={filters.model}
             onChange={(value) => handleFilterChange('model', value)}
+            loading={modelLoading}
           >
             <Option value="all">All Models</Option>
             {meterModels.map((model, index) => (
@@ -360,10 +488,11 @@ const AssetDashboard: React.FC<AssetDashboardProps> = ({ copilotOpen = false }) 
             style={{ width: 175 }}
             value={filters.type}
             onChange={(value) => handleFilterChange('type', value)}
+            loading={typeLoading}
           >
             <Option value="all">All Types</Option>
             {meterTypes.map((type, index) => (
-              <Option key={index} value={type.toLowerCase().replace(/\s+/g, '-')}>
+              <Option key={index} value={type.toLowerCase()}>
                 {type.replace(/_/g, ' ')}
               </Option>
             ))}
@@ -374,13 +503,16 @@ const AssetDashboard: React.FC<AssetDashboardProps> = ({ copilotOpen = false }) 
             style={{ width: 175}}
             value={filters.connectivity}
             onChange={(value) => handleFilterChange('connectivity', value)}
+            loading={connectivityLoading}
           >
             <Option value="all">All Connectivity</Option>
-            {nicTypes.map((nic, index) => (
-              <Option key={index} value={nic.nicType.toLowerCase()}>
-                {nic.nicType}
-              </Option>
-            ))}
+            {nicTypes
+              .filter(nic => nic && nic.nicType && typeof nic.nicType === 'string')
+              .map((nic, index) => (
+                <Option key={index} value={nic.nicType.toLowerCase()}>
+                  {nic.nicType}
+                </Option>
+              ))}
           </Select>
           <Button className={styles.filterBtn} type="primary" onClick={handleFilter}>Filter</Button>
           <Button className={styles.resetBtn} onClick={handleReset}>Reset</Button>
@@ -390,35 +522,6 @@ const AssetDashboard: React.FC<AssetDashboardProps> = ({ copilotOpen = false }) 
           <Button className={styles.exportBtn} onClick={handleExport}>Export</Button>
         </div>
       </div>
-
-      {/* API Data Display (for testing) - Commented out */}
-      {/* <div className={styles.apiDataDisplay}>
-        <div className={styles.apiDataItem}>
-          <span className={styles.apiDataLabel}>Total Assets:</span>
-          <span className={styles.apiDataValue}>{totalAssets}</span>
-        </div>
-        <div className={styles.apiDataItem}>
-          <span className={styles.apiDataLabel}>Asset Health:</span>
-          <span className={styles.apiDataValue}>{assetHealth}%</span>
-        </div>
-        <div className={styles.apiDataItem}>
-          <span className={styles.apiDataLabel}>Meter Types:</span>
-          <span className={styles.apiDataValue}>{meterTypes.length} types</span>
-        </div>
-        <div className={styles.apiDataItem}>
-          <span className={styles.apiDataLabel}>Manufacturers:</span>
-          <span className={styles.apiDataValue}>{manufacturers.length} companies</span>
-        </div>
-        <div className={styles.apiDataItem}>
-          <span className={styles.apiDataLabel}>Meter Models:</span>
-          <span className={styles.apiDataValue}>{meterModels.length} models</span>
-        </div>
-        <div className={styles.apiDataItem}>
-          <span className={styles.apiDataLabel}>Connectivity Types:</span>
-          <span className={styles.apiDataValue}>{nicTypes.length} types</span>
-        </div>
-      </div> */}
-
 
       {/* Key Metrics Cards */}
       <KeyMetricsCards />

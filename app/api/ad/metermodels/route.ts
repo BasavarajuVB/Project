@@ -1,11 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const response = await fetch('http://103.114.154.128:30808/ad/metermodels', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      cache: 'no-store'
     });
 
     if (!response.ok) {
