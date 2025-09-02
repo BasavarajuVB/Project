@@ -19,6 +19,7 @@ import Header from './components/common/Header';
 import CopilotWidget from './components/pages/PageDataPush/widgets/CopilotWidget';
 import PageDataPush from './components/pages/PageDataPush/PageDataPush';
 import PageDataPull from './components/pages/PageDataPull/PageDataPull';
+import PageHome from './components/pages/PageHome/PageHome';
 import './styles/globals.css';
 
 const { Sider, Content } = Layout;
@@ -104,18 +105,7 @@ export default function Dashboard() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isMobile, setIsMobile] = React.useState(false);
   const [copilotOpen, setCopilotOpen] = React.useState(false);
-  const [sidebarWasCollapsedBeforeCopilot, setSidebarWasCollapsedBeforeCopilot] = React.useState<boolean | null>(null);
-  const [currentPage, setCurrentPage] = React.useState('data-push');
-  const PAGE_LABELS: Record<string, string> = React.useMemo(() => ({
-    'home': 'Home',
-    'meter-list': 'Meter List',
-    'data-push': 'Data Push',
-    'data-pull': 'Data Pull',
-    'commands': 'Commands',
-    'reports': 'Reports',
-    'admin': 'Admin',
-    'api': 'API',
-  }), []);
+  const [currentPage, setCurrentPage] = React.useState('home');
 
   React.useEffect(() => {
     const checkMobile = () => {
@@ -152,20 +142,10 @@ export default function Dashboard() {
 
   const handleOpenCopilot = () => {
     setCopilotOpen(true);
-    // Auto-collapse sidebar (remember previous state) on non-mobile
-    if (!isMobile) {
-      setSidebarWasCollapsedBeforeCopilot(sidebarCollapsed);
-      setSidebarCollapsed(true);
-    }
   };
 
   const handleCloseCopilot = () => {
     setCopilotOpen(false);
-    // Restore sidebar to previous state after closing Copilot (non-mobile)
-    if (!isMobile && sidebarWasCollapsedBeforeCopilot !== null) {
-      setSidebarCollapsed(sidebarWasCollapsedBeforeCopilot);
-      setSidebarWasCollapsedBeforeCopilot(null);
-    }
   };
 
   // Export helpers for CSV/Excel using static data on screen
@@ -213,7 +193,7 @@ export default function Dashboard() {
       
       <Sider 
         width={200} 
-        className={`sidebar ${sidebarCollapsed ? 'custom-collapsed' : 'custom-expanded'}`}
+        className={`sidebar main-sidebar ${sidebarCollapsed ? 'custom-collapsed' : 'custom-expanded'}`}
         collapsed={isMobile ? true : sidebarCollapsed}
         collapsedWidth={60}
         trigger={null}
@@ -225,7 +205,7 @@ export default function Dashboard() {
         </div>
         <Menu
           mode="inline"
-          defaultSelectedKeys={['data-push']}
+          defaultSelectedKeys={['home']}
           selectedKeys={[currentPage]}
           items={menuItems}
           inlineCollapsed={sidebarCollapsed}
@@ -236,12 +216,16 @@ export default function Dashboard() {
       <Header 
         sidebarCollapsed={!isMobile && sidebarCollapsed} 
         onOpenCopilot={handleOpenCopilot}
+        currentPage={currentPage}
         copilotOpen={copilotOpen}
-        pageTitle={PAGE_LABELS[currentPage] ?? 'Dashboard'}
       />
       
       <Layout>
         <Content className={`main-content ${!isMobile && sidebarCollapsed ? 'collapsed-sidebar' : ''} ${copilotOpen ? 'copilot-open' : ''}`}>
+          {currentPage === 'home' && (
+            <PageHome copilotOpen={copilotOpen} />
+          )}
+
           {currentPage === 'data-push' && (
             <PageDataPush onExport={exportDataPush} />
           )}

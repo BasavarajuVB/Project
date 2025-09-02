@@ -1,24 +1,38 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Badge, Button } from 'antd';
 import { BellOutlined, RobotOutlined } from '@ant-design/icons';
 
 interface HeaderProps {
   sidebarCollapsed: boolean;
   onOpenCopilot: () => void;
+  currentPage?: string;
   copilotOpen?: boolean;
-  pageTitle?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot, copilotOpen, pageTitle }) => {
-  const currentTime = new Date().toLocaleString('en-US', {
-    month: 'short',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true
-  });
+const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot, currentPage = 'data-push', copilotOpen }) => {
+  const [isClient, setIsClient] = useState(false);
+  const [currentTime, setCurrentTime] = useState('');
+
+  useEffect(() => {
+    setIsClient(true);
+    const updateTime = () => {
+      const time = new Date().toLocaleString('en-US', {
+        month: 'short',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      setCurrentTime(time);
+    };
+    
+    updateTime();
+    const interval = setInterval(updateTime, 60000); // Update every minute
+    
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className={`header ${sidebarCollapsed ? 'collapsed-sidebar' : ''} ${copilotOpen ? 'copilot-open' : ''}`}>
@@ -28,7 +42,11 @@ const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot, copilo
           <span className="breadcrumb-separator">/</span>
           <span className="breadcrumb-item">SLA Dashboards</span>
           <span className="breadcrumb-separator">/</span>
-          <span className="breadcrumb-item active">{pageTitle || 'Dashboard'}</span>
+          <span className="breadcrumb-item active">
+            {currentPage === 'home' ? 'Asset Dashboard' : 
+             currentPage === 'data-push' ? 'Data Push' : 
+             currentPage === 'data-pull' ? 'Data Pull' : 'Dashboard'}
+          </span>
         </div>
       </div>
       
@@ -40,7 +58,9 @@ const Header: React.FC<HeaderProps> = ({ sidebarCollapsed, onOpenCopilot, copilo
           </div>
           <div className="time-section">
             <span className="latest-interval">Latest Interval:</span>
-            <span className="timestamp">{currentTime}</span>
+            <span className="timestamp">
+              {isClient ? currentTime : 'Loading...'}
+            </span>
           </div>
         </div>
       </div>

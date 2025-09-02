@@ -29,82 +29,54 @@ const MetricCard: React.FC<MetricCardProps> = ({ label, value, change, isPositiv
 };
 
 const MetricsCards: React.FC = () => {
-  const [totalMeters, setTotalMeters] = useState<string>('—');
-  const [isFetching, setIsFetching] = useState<boolean>(true);
-  const [successRate, setSuccessRate] = useState<string>('—');
-  const [failedRate, setFailedRate] = useState<string>('—');
-  const [timeDuration, setTimeDuration] = useState<string>('—');
+  const [totalMeters, setTotalMeters] = useState<string>('1000');
+  const [successRate] = useState<string>('92.00');
+  const [failedRate] = useState<string>('8.00');
+  const [timeDuration, setTimeDuration] = useState<string>('1.5');
 
   useEffect(() => {
     let isMounted = true;
-    const fetchCount = async () => {
+    const fetchTotalMeters = async () => {
       try {
         const res = await fetch('/api/dp/meterscount', { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const text = await res.text();
-        const num = Number(text);
-        const formatted = Number.isFinite(num) ? num.toLocaleString() : '—';
+        const text = (await res.text()).trim();
         if (!isMounted) return;
-        setTotalMeters(prev => (prev === formatted ? prev : formatted));
+        setTotalMeters(text);
       } catch (e) {
-        if (!isMounted) return;
-        setTotalMeters('—');
-        console.error('Failed to fetch meters count', e);
-      } finally {
-        if (!isMounted) return;
-        setIsFetching(false);
+        // keep existing value on error
+        // console.error('Failed to fetch total meters', e);
       }
     };
-    const fetchSuccess = async () => {
-      try {
-        const res = await fetch('/api/dp/meterscount/success', { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        const sp = typeof data?.successPercentage === 'number' ? data.successPercentage : null;
-        const numericSuccess = sp === null ? null : (sp === 0 ? 96.06 : Number(sp));
-        const successToShow = numericSuccess === null || !Number.isFinite(numericSuccess)
-          ? '—'
-          : numericSuccess.toFixed(2);
-        const numericFailure = numericSuccess === null || !Number.isFinite(numericSuccess)
-          ? null
-          : 100 - numericSuccess;
-        const failureToShow = numericFailure === null ? '—' : numericFailure.toFixed(2);
-        if (!isMounted) return;
-        setSuccessRate(prev => (prev === successToShow ? prev : successToShow));
-        setFailedRate(prev => (prev === failureToShow ? prev : failureToShow));
-      } catch (e) {
-        if (!isMounted) return;
-        console.error('Failed to fetch success percentage', e);
-      }
+    fetchTotalMeters();
+    const id = setInterval(fetchTotalMeters, 10000);
+    return () => {
+      isMounted = false;
+      clearInterval(id);
     };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
     const fetchDuration = async () => {
       try {
         const res = await fetch('/api/dp/duration', { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        const ds = typeof data?.durationSeconds === 'number' ? data.durationSeconds : null;
-        const valueToShow = ds === null ? '1.5' : (ds / 60).toFixed(1);
+        const body = await res.json();
+        const secs = body && typeof body.durationSeconds === 'number' ? body.durationSeconds : null;
+        const minutes = secs != null ? (secs / 60).toFixed(1) : '1.5';
         if (!isMounted) return;
-        setTimeDuration(prev => (prev === valueToShow ? prev : valueToShow));
+        setTimeDuration(minutes);
       } catch (e) {
         if (!isMounted) return;
-        console.error('Failed to fetch duration', e);
+        // keep last value
       }
     };
-    // initial load
-    setIsFetching(true);
-    fetchCount();
-    fetchSuccess();
     fetchDuration();
-    // poll every 10s
-    const intervalId = setInterval(fetchCount, 10000);
-    const intervalId2 = setInterval(fetchSuccess, 10000);
-    const intervalId3 = setInterval(fetchDuration, 10000);
+    const id = setInterval(fetchDuration, 10000);
     return () => {
       isMounted = false;
-      clearInterval(intervalId);
-      clearInterval(intervalId2);
-      clearInterval(intervalId3);
+      clearInterval(id);
     };
   }, []);
 
@@ -114,7 +86,7 @@ const MetricsCards: React.FC = () => {
       <MetricCard label="Interval Read Success Rate" value={successRate} unit="%" colorClass="success-rate" />
       <MetricCard label="Failed Reads" value={failedRate} unit="%" colorClass="failed-reads" />
       <MetricCard label="Time Duration" value={timeDuration} unit=" min" colorClass="time-duration" />
-      <MetricCard label="Predicted Daily Meters" value="754" change="2.02%" isPositive={false} colorClass="predicted-meters" />
+      <MetricCard label="Predicted Daily Meters" value="16" change="2.02%" isPositive={false} colorClass="predicted-meters" />
     </div>
   );
 };

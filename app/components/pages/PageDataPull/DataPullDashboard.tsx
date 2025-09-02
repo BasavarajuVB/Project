@@ -36,13 +36,13 @@ const DataPullDashboard: React.FC = () => {
   ];
 
   const monthlyData = [
-    { date: 'Mar 27', success: 90, failure: 10 },
-    { date: 'Mar 28', success: 80, failure: 20 },
-    { date: 'Mar 29', success: 85, failure: 15 },
-    { date: 'Mar 30', success: 60, failure: 40 },
-    { date: 'Mar 31', success: 75, failure: 25 },
-    { date: 'Apr 1', success: 95, failure: 5 },
-    { date: 'Apr 2', success: 93, failure: 7 },
+    { date: 'Aug 16', success: 90, failure: 10 },
+    { date: 'Aug 17', success: 80, failure: 20 },
+    { date: 'Aug 18', success: 85, failure: 15 },
+    { date: 'Aug 19', success: 60, failure: 40 },
+    { date: 'Aug 20', success: 75, failure: 25 },
+    { date: 'Aug 21', success: 95, failure: 5 },
+    { date: 'Aug 22', success: 93, failure: 7 },
   ];
 
   const dataCollectionData = [
@@ -231,17 +231,17 @@ const DataPullDashboard: React.FC = () => {
       <div className={styles['metrics-grid']}>
         <div className={`${styles['metric-card']} ${styles['total-meters']}`}>
           <div className={styles['metric-label']}>Total meters</div>
-          <div className={styles['metric-value']}>12,34,567</div>
+          <div className={styles['metric-value']}>1000</div>
         </div>
         
         <div className={`${styles['metric-card']} ${styles['commands-executed']}`}>
           <div className={styles['metric-label']}>Pulls Commands Executed vs Sent</div>
-          <div className={styles['metric-value']}>500k / 700k</div>
+          <div className={styles['metric-value']}>5.8k / 7.3k</div>
         </div>
         
         <div className={`${styles['metric-card']} ${styles['request-types']}`}>
           <div className={styles['metric-label']}>Request Types: Uni-, Multi-, Broadcast</div>
-          <div className={styles['metric-value']}>1k, 3.3k, 7</div>
+          <div className={styles['metric-value']}>0.1k, 0.2k, 7k</div>
         </div>
         
         <div className={`${styles['metric-card']} ${styles['success-rate']}`}>
