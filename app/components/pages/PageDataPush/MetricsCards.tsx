@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface MetricCardProps {
   label: string;
@@ -29,11 +29,56 @@ const MetricCard: React.FC<MetricCardProps> = ({ label, value, change, isPositiv
 };
 
 const MetricsCards: React.FC = () => {
-  // Fully static values (no API calls)
-  const [totalMeters] = useState<string>('1000');
+  const [totalMeters, setTotalMeters] = useState<string>('1000');
   const [successRate] = useState<string>('92.00');
   const [failedRate] = useState<string>('8.00');
-  const [timeDuration] = useState<string>('1.5');
+  const [timeDuration, setTimeDuration] = useState<string>('1.5');
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchTotalMeters = async () => {
+      try {
+        const res = await fetch('/api/dp/meterscount', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text = (await res.text()).trim();
+        if (!isMounted) return;
+        setTotalMeters(text);
+      } catch (e) {
+        // keep existing value on error
+        // console.error('Failed to fetch total meters', e);
+      }
+    };
+    fetchTotalMeters();
+    const id = setInterval(fetchTotalMeters, 10000);
+    return () => {
+      isMounted = false;
+      clearInterval(id);
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchDuration = async () => {
+      try {
+        const res = await fetch('/api/dp/duration', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const body = await res.json();
+        const secs = body && typeof body.durationSeconds === 'number' ? body.durationSeconds : null;
+        const minutes = secs != null ? (secs / 60).toFixed(1) : '1.5';
+        if (!isMounted) return;
+        setTimeDuration(minutes);
+      } catch (e) {
+        if (!isMounted) return;
+        // keep last value
+      }
+    };
+    fetchDuration();
+    const id = setInterval(fetchDuration, 10000);
+    return () => {
+      isMounted = false;
+      clearInterval(id);
+    };
+  }, []);
 
   return (
     <div className="metrics-grid">

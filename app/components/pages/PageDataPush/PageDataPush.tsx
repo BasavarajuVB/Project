@@ -19,72 +19,72 @@ const PageDataPush: React.FC<PageDataPushProps> = ({ onExport }) => {
   const [powerDeviations, setPowerDeviations] = useState<string>('31');
   const [outages, setOutages] = useState<string>('7');
 
-  // Dynamic effects commented out for static mode
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   const fetchTampers = async () => {
-  //     try {
-  //       const res = await fetch('/api/dp/tampers', { cache: 'no-store' });
-  //       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  //       const text = (await res.text()).trim();
-  //       if (!isMounted) return;
-  //       setTampers(prev => (prev === text ? prev : text));
-  //     } catch (e) {
-  //       if (!isMounted) return;
-  //       console.error('Failed to fetch tampers', e);
-  //     }
-  //   };
-  //   fetchTampers();
-  //   const intervalId = setInterval(fetchTampers, 10000);
-  //   return () => {
-  //     isMounted = false;
-  //     clearInterval(intervalId);
-  //   };
-  // }, []);
+  // Dynamic tampers polling
+  useEffect(() => {
+    let isMounted = true;
+    const fetchTampers = async () => {
+      try {
+        const res = await fetch('/api/dp/tampers', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text = (await res.text()).trim();
+        if (!isMounted) return;
+        setTampers(prev => (prev === text ? prev : text));
+      } catch (e) {
+        if (!isMounted) return;
+        // silent fail, keep last
+      }
+    };
+    fetchTampers();
+    const intervalId = setInterval(fetchTampers, 10000);
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
 
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   const fetchPowerDeviations = async () => {
-  //     try {
-  //       const res = await fetch('/api/dp/powerdeviations', { cache: 'no-store' });
-  //       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  //       const text = (await res.text()).trim();
-  //       if (!isMounted) return;
-  //       setPowerDeviations(prev => (prev === text ? prev : text));
-  //     } catch (e) {
-  //       if (!isMounted) return;
-  //       console.error('Failed to fetch power deviations', e);
-  //     }
-  //   };
-  //   fetchPowerDeviations();
-  //   const intervalId = setInterval(fetchPowerDeviations, 10000);
-  //   return () => {
-  //     isMounted = false;
-  //     clearInterval(intervalId);
-  //   };
-  // }, []);
+  useEffect(() => {
+    let isMounted = true;
+    const fetchPowerDeviations = async () => {
+      try {
+        const res = await fetch('/api/dp/powerdeviations', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text = (await res.text()).trim();
+        if (!isMounted) return;
+        setPowerDeviations(prev => (prev === text ? prev : text));
+      } catch (e) {
+        if (!isMounted) return;
+        // silent fail, keep last
+      }
+    };
+    fetchPowerDeviations();
+    const intervalId = setInterval(fetchPowerDeviations, 10000);
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
 
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   const fetchOutages = async () => {
-  //     try {
-  //       const res = await fetch('/api/dp/outages', { cache: 'no-store' });
-  //       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  //       const text = (await res.text()).trim();
-  //       if (!isMounted) return;
-  //       setOutages(prev => (prev === text ? prev : text));
-  //     } catch (e) {
-  //       if (!isMounted) return;
-  //       console.error('Failed to fetch outages', e);
-  //     }
-  //   };
-  //   fetchOutages();
-  //   const intervalId = setInterval(fetchOutages, 10000);
-  //   return () => {
-  //     isMounted = false;
-  //     clearInterval(intervalId);
-  //   };
-  // }, []);
+  useEffect(() => {
+    let isMounted = true;
+    const fetchOutages = async () => {
+      try {
+        const res = await fetch('/api/dp/outages', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text = (await res.text()).trim();
+        if (!isMounted) return;
+        setOutages(prev => (prev === text ? prev : text));
+      } catch (e) {
+        if (!isMounted) return;
+        // silent fail, keep last
+      }
+    };
+    fetchOutages();
+    const intervalId = setInterval(fetchOutages, 10000);
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
